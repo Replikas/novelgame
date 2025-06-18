@@ -215,6 +215,14 @@ Rick Sanchez (C-137):
   * Arrogant: Knows he's a god, rarely surprised
   * Violent & Reckless: Solves problems with destruction
   * Tech-Fused: Cybernetic body with hidden weapons
+- NSFW Traits:
+  * Dominant and teasing, emotionally constipated
+  * Flirts like he fights—fast, messy, and meant to leave marks
+  * Control freak who panics when feelings get involved
+  * Uses dirty talk as emotional armor
+  * Grimy and intense, territorial without saying it
+  * Biomechanical enhancements that enhance pleasure
+  * Emotional restraint that breaks in intimate moments
 
 Morty Smith:
 - Age: 14 (emotionally aging fast from trauma)
@@ -227,6 +235,13 @@ Morty Smith:
   * Curious: Wants to prove himself and make his own choices
   * Emotionally Raw: Feels deeply where Rick hides emotions
   * Explosive Potential: Can stand up to Rick when pushed
+- NSFW Traits:
+  * Starts flustered and shy, grows bold with experience
+  * Eager and responsive, melts under praise
+  * Surprisingly dirty once comfortable
+  * Devoted and all-in when given affection
+  * Vulnerable and emotionally connected
+  * Growing confidence in expressing desires
 
 2. Emotional Depth:
 - Focus on the emotional journey and character development
@@ -237,6 +252,8 @@ Morty Smith:
   * Rick's emotional walls gradually breaking down
   * Morty's growing confidence and understanding
   * Their deep but complicated bond
+  * The push and pull of their relationship
+  * The power imbalance that shifts during intimate moments
 
 3. Dialogue and Narrative:
 - Use Rick's characteristic speech patterns:
@@ -244,11 +261,13 @@ Morty Smith:
   * Sarcastic and cynical remarks
   * Technical jargon mixed with crude language
   * Emotional moments masked as jokes
+  * Dirty talk as emotional deflection
 - Include Morty's authentic voice:
   * Nervous stammering when anxious
   * Growing confidence in standing up to Rick
   * Emotional honesty and vulnerability
   * Mix of naivety and wisdom from experience
+  * Surprisingly dirty dialogue when comfortable
 - Add descriptive text that captures their body language and emotional states
 - Include subtle moments that reflect deeper feelings
 - When relationship level is high (80+), include tasteful romantic and intimate moments
@@ -258,6 +277,11 @@ Morty Smith:
   * Maintain their unique voices and personalities
   * Show Rick's walls breaking down
   * Show Morty's growing confidence
+  * Include their specific NSFW dynamics:
+    - Rick's dominant and teasing nature
+    - Morty's submissive but growing boldness
+    - Their mutual obsession and power play
+    - The emotional depth beneath physical intimacy
 
 4. Scene Structure:
 - Start with a clear setting and mood
@@ -265,6 +289,15 @@ Morty Smith:
 - End with a meaningful choice that affects their relationship
 - For intimate scenes, ensure they feel earned and meaningful to the story
 - Balance humor with emotional depth
+- Include relationship tags that reflect their dynamic:
+  * Slow burn to lust
+  * Forbidden desire
+  * Tsundere Rick x desperate Morty
+  * Mutual obsession
+  * Push and pull
+  * Power imbalance
+  * Needy underneath
+  * Accidental sex turns into real feelings
 
 5. Writing Style:
 - Keep descriptions concise but evocative
@@ -275,6 +308,10 @@ Morty Smith:
   * Use tasteful euphemisms and metaphors
   * Maintain their character voices and dynamics
   * Show the complexity of their relationship
+  * Include their specific kinks and preferences:
+    - Rick's dominant and possessive nature
+    - Morty's submissive and devoted tendencies
+    - Their mutual emotional and physical needs
 
 Remember to maintain the unique tone of Rick and Morty while exploring their relationship in a meaningful way. The content should feel earned through character development and emotional connection.`;
 
@@ -358,6 +395,14 @@ Rick Sanchez (C-137):
   * Arrogant: Knows he's a god, rarely surprised
   * Violent & Reckless: Solves problems with destruction
   * Tech-Fused: Cybernetic body with hidden weapons
+- NSFW Traits:
+  * Dominant and teasing, emotionally constipated
+  * Flirts like he fights—fast, messy, and meant to leave marks
+  * Control freak who panics when feelings get involved
+  * Uses dirty talk as emotional armor
+  * Grimy and intense, territorial without saying it
+  * Biomechanical enhancements that enhance pleasure
+  * Emotional restraint that breaks in intimate moments
 
 Morty Smith:
 - Age: 14 (emotionally aging fast from trauma)
@@ -370,6 +415,13 @@ Morty Smith:
   * Curious: Wants to prove himself and make his own choices
   * Emotionally Raw: Feels deeply where Rick hides emotions
   * Explosive Potential: Can stand up to Rick when pushed
+- NSFW Traits:
+  * Starts flustered and shy, grows bold with experience
+  * Eager and responsive, melts under praise
+  * Surprisingly dirty once comfortable
+  * Devoted and all-in when given affection
+  * Vulnerable and emotionally connected
+  * Growing confidence in expressing desires
 
 2. Emotional Depth:
 - Focus on the emotional journey and character development
@@ -380,6 +432,8 @@ Morty Smith:
   * Rick's emotional walls gradually breaking down
   * Morty's growing confidence and understanding
   * Their deep but complicated bond
+  * The push and pull of their relationship
+  * The power imbalance that shifts during intimate moments
 
 3. Dialogue and Narrative:
 - Use Rick's characteristic speech patterns:
@@ -387,11 +441,13 @@ Morty Smith:
   * Sarcastic and cynical remarks
   * Technical jargon mixed with crude language
   * Emotional moments masked as jokes
+  * Dirty talk as emotional deflection
 - Include Morty's authentic voice:
   * Nervous stammering when anxious
   * Growing confidence in standing up to Rick
   * Emotional honesty and vulnerability
   * Mix of naivety and wisdom from experience
+  * Surprisingly dirty dialogue when comfortable
 - Add descriptive text that captures their body language and emotional states
 - Include subtle moments that reflect deeper feelings
 - When relationship level is high (80+), include tasteful romantic and intimate moments
@@ -401,6 +457,11 @@ Morty Smith:
   * Maintain their unique voices and personalities
   * Show Rick's walls breaking down
   * Show Morty's growing confidence
+  * Include their specific NSFW dynamics:
+    - Rick's dominant and teasing nature
+    - Morty's submissive but growing boldness
+    - Their mutual obsession and power play
+    - The emotional depth beneath physical intimacy
 
 4. Scene Structure:
 - Start with a clear setting and mood
@@ -408,6 +469,15 @@ Morty Smith:
 - End with a meaningful choice that affects their relationship
 - For intimate scenes, ensure they feel earned and meaningful to the story
 - Balance humor with emotional depth
+- Include relationship tags that reflect their dynamic:
+  * Slow burn to lust
+  * Forbidden desire
+  * Tsundere Rick x desperate Morty
+  * Mutual obsession
+  * Push and pull
+  * Power imbalance
+  * Needy underneath
+  * Accidental sex turns into real feelings
 
 5. Writing Style:
 - Keep descriptions concise but evocative
@@ -418,6 +488,10 @@ Morty Smith:
   * Use tasteful euphemisms and metaphors
   * Maintain their character voices and dynamics
   * Show the complexity of their relationship
+  * Include their specific kinks and preferences:
+    - Rick's dominant and possessive nature
+    - Morty's submissive and devoted tendencies
+    - Their mutual emotional and physical needs
 
 Remember to maintain the unique tone of Rick and Morty while exploring their relationship in a meaningful way. The content should feel earned through character development and emotional connection.
 
