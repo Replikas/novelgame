@@ -2,7 +2,7 @@
 
 ## Overview
 
-Rickorty: Fall Damage is a browser-based visual novel game featuring Rick and Morty characters. The game uses AI-powered dialogue generation through the Chutes API to create dynamic, branching storylines based on player choices. Players navigate an emotional narrative between Rick and Morty in a post-mission garage setting, with multiple possible endings and a relationship tracking system.
+Rickorty: Fall Damage is a browser-based visual novel game featuring Rick and Morty characters. The game uses AI-powered dialogue generation through the Chutes API to create dynamic, branching storylines based on player choices. Players navigate an emotional narrative between Rick and Morty in a post-mission garage setting, with multiple possible endings and a relationship tracking system. The game supports mature content and themes appropriate for adult audiences.
 
 ## System Architecture
 
@@ -118,3 +118,4 @@ UI preferences:
 - Readable story progression with complete history visible
 - Loading animation (...) when generating new content after choices
 - Speed selector for typing effect (slow/normal/fast/instant)
+- Mature content support for adult storytelling themes
