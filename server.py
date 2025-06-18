@@ -10,6 +10,15 @@ class GameHandler(http.server.SimpleHTTPRequestHandler):
         print(f"Received request for path: {self.path}")  # Debug log
         parsed_path = urlparse(self.path)
         
+        # Health check endpoint
+        if parsed_path.path == '/health':
+            print("Health check request received")  # Debug log
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({"status": "healthy"}).encode())
+            return
+            
         # API endpoint to get the API key
         if parsed_path.path == '/api/config':
             print("Handling /api/config request")  # Debug log
