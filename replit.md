@@ -102,4 +102,4 @@ AI Response → Content Parsing → UI Update → Await Next Choice
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
-UI preferences: Less intrusive loading indicators, prefer inline loading in story box rather than full-screen overlays.
+UI preferences: No loading indicators, prefer typewriter/streaming text effect as story content is displayed.

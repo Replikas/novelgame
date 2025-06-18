@@ -60,37 +60,54 @@ class RickortyGame {
         });
     }
 
-    // Show loading indicator below existing content
-    showLoading() {
-        const dialogueContent = document.getElementById('dialogueContent');
-        
-        // Remove any existing loading indicator
-        const existingLoading = document.getElementById('inlineLoading');
-        if (existingLoading) {
-            existingLoading.remove();
+    // Typewriter effect for text
+    async typewriterEffect(element, text, speed = 30) {
+        element.innerHTML = '';
+        for (let i = 0; i < text.length; i++) {
+            element.innerHTML += text.charAt(i);
+            await new Promise(resolve => setTimeout(resolve, speed));
         }
-        
-        const loadingElement = document.createElement('div');
-        loadingElement.className = 'inline-loading';
-        loadingElement.id = 'inlineLoading';
-        loadingElement.innerHTML = '<div class="loading-dots">Writing<span>.</span><span>.</span><span>.</span></div>';
-        
-        // Add loading below existing content
-        dialogueContent.appendChild(loadingElement);
-        
-        // Disable choice buttons while loading
-        const choiceButtons = document.querySelectorAll('.choice-btn');
-        choiceButtons.forEach(btn => btn.disabled = true);
-        
-        document.getElementById('errorMessage').classList.add('hidden');
     }
 
-    // Hide loading indicator
-    hideLoading() {
-        const inlineLoading = document.getElementById('inlineLoading');
-        if (inlineLoading) {
-            inlineLoading.remove();
+    // Typewriter effect for HTML content
+    async typewriterEffectHTML(element, htmlText, speed = 30) {
+        element.innerHTML = '';
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = htmlText;
+        const textContent = tempDiv.textContent || tempDiv.innerText;
+        
+        let currentChar = 0;
+        const typeNextChar = () => {
+            if (currentChar < textContent.length) {
+                // Find the HTML up to the current character
+                let htmlUpToChar = '';
+                let charCount = 0;
+                let inTag = false;
+                
+                for (let i = 0; i < htmlText.length; i++) {
+                    if (htmlText[i] === '<') inTag = true;
+                    htmlUpToChar += htmlText[i];
+                    if (!inTag && htmlText[i] !== '<') {
+                        charCount++;
+                        if (charCount > currentChar) break;
+                    }
+                    if (htmlText[i] === '>') inTag = false;
+                }
+                
+                element.innerHTML = htmlUpToChar;
+                currentChar++;
+            }
+        };
+        
+        // Type out character by character
+        for (let i = 0; i <= textContent.length; i++) {
+            typeNextChar();
+            if (i < textContent.length) {
+                await new Promise(resolve => setTimeout(resolve, speed));
+            }
         }
+        
+        element.innerHTML = htmlText; // Ensure final HTML is complete
     }
 
     // Show error message
@@ -122,17 +139,14 @@ class RickortyGame {
             document.getElementById('dialogueContent').innerHTML = '';
         }
         
-        this.showLoading();
-        
         // Initial story prompt
         const initialPrompt = this.buildPrompt("GAME_START", "The story begins. Rick and Morty have just returned to the garage after a dangerous mission that went wrong. Morty is visibly shaken and emotionally vulnerable, while Rick is trying to process what happened in his usual deflective way.");
         
         try {
             const response = await this.callLLM(initialPrompt);
-            this.processLLMResponse(response);
+            await this.processLLMResponse(response);
         } catch (error) {
             console.error('Failed to start game:', error);
-            this.hideLoading();
             this.showError('Failed to start the game. Please check your connection and try again.');
         }
     }
@@ -223,7 +237,7 @@ IMPORTANT: Use plain text for dialogue - no asterisks, markdown, or special form
     }
 
     // Process LLM response
-    processLLMResponse(response) {
+    async processLLMResponse(response) {
         try {
             let parsedResponse;
             
@@ -249,15 +263,12 @@ IMPORTANT: Use plain text for dialogue - no asterisks, markdown, or special form
             this.gameState.currentScene = parsedResponse;
             this.gameState.turnCount++;
             
-            // Remove loading indicator but keep existing content
-            this.hideLoading();
-            
-            // Display narrative if present
+            // Display content with typewriter effect
             if (parsedResponse.narrative) {
-                this.displayNarrative(parsedResponse.narrative);
+                await this.displayNarrative(parsedResponse.narrative);
             }
             
-            this.displayScene(parsedResponse.scene);
+            await this.displayScene(parsedResponse.scene);
             this.displayChoices(parsedResponse.choices);
             
         } catch (error) {
@@ -298,22 +309,24 @@ IMPORTANT: Use plain text for dialogue - no asterisks, markdown, or special form
         return { scene, choices };
     }
 
-    // Display narrative text
-    displayNarrative(narrative) {
+    // Display narrative text with typewriter effect
+    async displayNarrative(narrative) {
         const dialogueContent = document.getElementById('dialogueContent');
         
         const narrativeElement = document.createElement('div');
         narrativeElement.className = 'narrative-text';
-        narrativeElement.innerHTML = `<em>${narrative}</em>`;
         
         dialogueContent.appendChild(narrativeElement);
+        
+        // Typewriter effect for narrative
+        await this.typewriterEffectHTML(narrativeElement, `<em>${narrative}</em>`, 25);
     }
 
-    // Display scene dialogue and narrative
-    displayScene(scene) {
+    // Display scene dialogue and narrative with typewriter effect
+    async displayScene(scene) {
         const dialogueContent = document.getElementById('dialogueContent');
         
-        scene.forEach(item => {
+        for (const item of scene) {
             if (item.character) {
                 // This is character dialogue
                 const dialogueLine = document.createElement('div');
@@ -335,12 +348,6 @@ IMPORTANT: Use plain text for dialogue - no asterisks, markdown, or special form
                 characterName.textContent = item.character;
                 
                 const dialogueText = document.createElement('div');
-                // Process basic markdown formatting
-                let formattedText = item.dialogue
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
-                    .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italics
-                    .replace(/_(.*?)_/g, '<em>$1</em>'); // Underline to italics
-                dialogueText.innerHTML = formattedText;
                 
                 textContainer.appendChild(characterName);
                 textContainer.appendChild(dialogueText);
@@ -349,15 +356,27 @@ IMPORTANT: Use plain text for dialogue - no asterisks, markdown, or special form
                 dialogueLine.appendChild(textContainer);
                 
                 dialogueContent.appendChild(dialogueLine);
+                
+                // Process basic markdown formatting
+                let formattedText = item.dialogue
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italics
+                    .replace(/_(.*?)_/g, '<em>$1</em>'); // Underline to italics
+                
+                // Typewriter effect for dialogue
+                await this.typewriterEffectHTML(dialogueText, formattedText, 35);
+                
             } else if (item.narrative) {
                 // This is narrative text between dialogue
                 const narrativeElement = document.createElement('div');
                 narrativeElement.className = 'narrative-text';
-                narrativeElement.innerHTML = `<em>${item.narrative}</em>`;
                 
                 dialogueContent.appendChild(narrativeElement);
+                
+                // Typewriter effect for narrative
+                await this.typewriterEffectHTML(narrativeElement, `<em>${item.narrative}</em>`, 25);
             }
-        });
+        }
         
         // Add scene to history (only dialogue parts)
         const sceneText = scene.filter(item => item.character)
@@ -384,18 +403,15 @@ IMPORTANT: Use plain text for dialogue - no asterisks, markdown, or special form
         // Remove choice buttons
         document.getElementById('choicesContainer').innerHTML = '';
         
-        this.showLoading();
-        
         // Update relationship based on choice (simple logic)
         this.updateRelationship(index);
         
         try {
             const prompt = this.buildPrompt(choice);
             const response = await this.callLLM(prompt);
-            this.processLLMResponse(response);
+            await this.processLLMResponse(response);
         } catch (error) {
             console.error('Failed to get next scene:', error);
-            this.hideLoading();
             this.showError('Failed to continue the story. Please try again.');
         }
     }
