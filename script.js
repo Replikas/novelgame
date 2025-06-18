@@ -130,18 +130,21 @@ Current relationship dynamic: ${relationshipState}
 ${additionalContext}
 
 TASK: Write the next story scene that includes:
-1. A narrative description of the setting/atmosphere (2-3 sentences)
-2. Character dialogue and actions (3-6 exchanges between Rick and Morty)
-3. Internal thoughts or emotional context where relevant
+1. Rich narrative descriptions (3-4 sentences) covering setting, atmosphere, character emotions, and what's happening between dialogue
+2. Clean character dialogue (3-5 exchanges between Rick and Morty with no action descriptions)
+3. Additional narrative between dialogue exchanges to show character reactions, emotions, and scene progression
 
 Then provide exactly 3 meaningful choice options for Morty that will meaningfully impact the story direction.
 
 Respond in this exact JSON format:
 {
-  "narrative": "Brief description of the scene, setting, and atmosphere...",
+  "narrative": "Rich opening description of the scene, setting, atmosphere, and character states...",
   "scene": [
-    {"character": "Rick", "dialogue": "What Rick says...", "action": "Optional: what Rick does"},
-    {"character": "Morty", "dialogue": "What Morty responds...", "action": "Optional: what Morty does"}
+    {"character": "Rick", "dialogue": "What Rick says..."},
+    {"narrative": "Description of what happens next, how characters react, body language, emotions..."},
+    {"character": "Morty", "dialogue": "What Morty responds..."},
+    {"narrative": "More narrative describing the tension, environment, or character feelings..."},
+    {"character": "Rick", "dialogue": "Rick's response..."}
   ],
   "choices": [
     "First choice - more emotional/vulnerable approach",
@@ -150,7 +153,7 @@ Respond in this exact JSON format:
   ]
 }
 
-Make the dialogue authentic - Rick should be sharp-tongued but show hints of care, Morty should be genuine and reactive to Rick's behavior. Include subtext and emotional depth.`;
+Make the dialogue authentic - Rick should be sharp-tongued but show hints of care, Morty should be genuine and reactive to Rick's behavior. Use rich narrative sections to show character emotions, environmental details, and psychological tension between dialogue exchanges. The narrative should paint a vivid picture of the scene and characters' internal states.`;
     }
 
     // Call the LLM API
@@ -276,52 +279,54 @@ Make the dialogue authentic - Rick should be sharp-tongued but show hints of car
         dialogueContent.appendChild(narrativeElement);
     }
 
-    // Display scene dialogue
+    // Display scene dialogue and narrative
     displayScene(scene) {
         const dialogueContent = document.getElementById('dialogueContent');
         
-        scene.forEach(line => {
-            const dialogueLine = document.createElement('div');
-            dialogueLine.className = `dialogue-line ${line.character.toLowerCase()}`;
-            
-            const avatar = document.createElement('img');
-            avatar.className = 'character-avatar';
-            avatar.src = `assets/${line.character.toLowerCase()}-avatar.jpg`;
-            avatar.alt = `${line.character} Avatar`;
-            avatar.onerror = () => {
-                // Fallback if avatar image fails to load
-                avatar.style.display = 'none';
-            };
-            
-            const textContainer = document.createElement('div');
-            textContainer.className = 'dialogue-text';
-            
-            const characterName = document.createElement('div');
-            characterName.className = 'character-name';
-            characterName.textContent = line.character;
-            
-            const dialogueText = document.createElement('div');
-            dialogueText.textContent = line.dialogue;
-            
-            // Add action text if present
-            if (line.action) {
-                const actionText = document.createElement('div');
-                actionText.className = 'action-text';
-                actionText.innerHTML = `<em>${line.action}</em>`;
-                textContainer.appendChild(actionText);
+        scene.forEach(item => {
+            if (item.character) {
+                // This is character dialogue
+                const dialogueLine = document.createElement('div');
+                dialogueLine.className = `dialogue-line ${item.character.toLowerCase()}`;
+                
+                const avatar = document.createElement('img');
+                avatar.className = 'character-avatar';
+                avatar.src = `assets/${item.character.toLowerCase()}-avatar.jpg`;
+                avatar.alt = `${item.character} Avatar`;
+                avatar.onerror = () => {
+                    avatar.style.display = 'none';
+                };
+                
+                const textContainer = document.createElement('div');
+                textContainer.className = 'dialogue-text';
+                
+                const characterName = document.createElement('div');
+                characterName.className = 'character-name';
+                characterName.textContent = item.character;
+                
+                const dialogueText = document.createElement('div');
+                dialogueText.textContent = item.dialogue;
+                
+                textContainer.appendChild(characterName);
+                textContainer.appendChild(dialogueText);
+                
+                dialogueLine.appendChild(avatar);
+                dialogueLine.appendChild(textContainer);
+                
+                dialogueContent.appendChild(dialogueLine);
+            } else if (item.narrative) {
+                // This is narrative text between dialogue
+                const narrativeElement = document.createElement('div');
+                narrativeElement.className = 'narrative-text';
+                narrativeElement.innerHTML = `<em>${item.narrative}</em>`;
+                
+                dialogueContent.appendChild(narrativeElement);
             }
-            
-            textContainer.appendChild(characterName);
-            textContainer.appendChild(dialogueText);
-            
-            dialogueLine.appendChild(avatar);
-            dialogueLine.appendChild(textContainer);
-            
-            dialogueContent.appendChild(dialogueLine);
         });
         
-        // Add scene to history
-        const sceneText = scene.map(line => `${line.character}: ${line.dialogue}`).join('\n');
+        // Add scene to history (only dialogue parts)
+        const sceneText = scene.filter(item => item.character)
+            .map(line => `${line.character}: ${line.dialogue}`).join('\n');
         this.gameState.storyHistory.push(sceneText);
     }
 

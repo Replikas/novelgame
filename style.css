@@ -164,13 +164,16 @@ body {
 
 /* Narrative and Action Text */
 .narrative-text {
-    background-color: #1a1a1a;
+    background-color: #0f1419;
     border-left: 3px solid #00ff00;
-    padding: 15px;
-    margin-bottom: 15px;
+    padding: 20px;
+    margin: 20px 0;
     font-style: italic;
-    color: #cccccc;
-    border-radius: 5px;
+    color: #b8c5d1;
+    border-radius: 8px;
+    line-height: 1.7;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .action-text {
