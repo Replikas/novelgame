@@ -715,14 +715,26 @@ Respond ONLY with the requested JSON structure. Do not include thinking tags, ex
     }
 
     // Optionally show loaded progress (refresh UI)
-    showLoadedProgress() {
-        // Redraw dialogue, choices, etc. as needed
-        // For now, just restart the current scene
+    async showLoadedProgress() {
+        // Clear existing content
         document.getElementById('dialogueContent').innerHTML = '';
         document.getElementById('choicesContainer').innerHTML = '';
+        
         if (this.gameState.currentScene) {
-            this.displayScene(this.gameState.currentScene.scene || []);
-            this.displayChoices(this.gameState.currentScene.choices || []);
+            // Display narrative if it exists
+            if (this.gameState.currentScene.narrative) {
+                await this.displayNarrative(this.gameState.currentScene.narrative);
+            }
+            
+            // Display scene content
+            if (this.gameState.currentScene.scene) {
+                await this.displayScene(this.gameState.currentScene.scene);
+            }
+            
+            // Display choices
+            if (this.gameState.currentScene.choices) {
+                this.displayChoices(this.gameState.currentScene.choices);
+            }
         }
     }
 }
