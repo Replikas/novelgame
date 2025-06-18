@@ -55,7 +55,10 @@ class RickortyGame {
         document.getElementById('historyBtn').addEventListener('click', () => this.showHistory());
         document.getElementById('closeHistoryBtn').addEventListener('click', () => this.hideHistory());
         document.getElementById('retryBtn').addEventListener('click', () => this.retryConnection());
-        document.getElementById('speedSelect').addEventListener('change', (e) => this.updateTypingSpeed(e.target.value));
+        const speedSelect = document.getElementById('speedSelect');
+        if (speedSelect) {
+            speedSelect.addEventListener('change', (e) => this.updateTypingSpeed(e.target.value));
+        }
         
         // Close modal when clicking outside
         document.getElementById('historyModal').addEventListener('click', (e) => {
@@ -76,6 +79,12 @@ class RickortyGame {
 
     // Typewriter effect for HTML content
     async typewriterEffectHTML(element, htmlText, speed = 30) {
+        // If speed is 0 (instant), just set the content immediately
+        if (speed === 0) {
+            element.innerHTML = htmlText;
+            return;
+        }
+        
         element.innerHTML = '';
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlText;
