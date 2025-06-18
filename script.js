@@ -205,8 +205,9 @@ class RickortyGame {
 SETTING: The story can take place in various locations, starting with Rick's garage. This is an ongoing character-driven story exploring their complex relationship with potential for emotional growth.
 
 CHARACTERS:
-- Rick Sanchez: Brilliant but emotionally guarded scientist. Uses sarcasm and cynicism to avoid vulnerability. Despite his harsh exterior, he cares deeply about Morty but struggles to show it.
-- Morty Smith: Anxious 14-year-old who is more emotionally intelligent than he appears. Often overwhelmed but genuinely caring and honest about his feelings.
+- Rick Sanchez: A genius scientist who is deeply cynical, alcoholic, and emotionally damaged. He uses complex scientific jargon, dark humor, and nihilistic philosophy. He's extremely intelligent but often reckless and selfish. He cares about Morty but shows it through tough love and occasional moments of vulnerability. He frequently burps, stutters, and uses phrases like "Wubba lubba dub dub" or "Get schwifty." He's not afraid to be crude or offensive, but he's not malicious - just deeply flawed and traumatized.
+
+- Morty Smith: A 14-year-old boy who is anxious, naive, and often overwhelmed by Rick's adventures. He's more emotionally intelligent than Rick but lacks confidence. He frequently stammers, says "Aw geez" or "Oh man," and struggles with moral dilemmas. He's loyal to Rick despite the danger and trauma, and he's capable of surprising courage and insight. He's not stupid - he's just young and inexperienced, often serving as the moral compass to Rick's amoral pragmatism.
 
 STORY CONTEXT:
 Story progression so far: ${historyText}
@@ -215,6 +216,16 @@ Current relationship dynamic: ${this.getRelationshipState()}
 ${additionalContext}
 
 WRITING GUIDELINES:
+- Stay true to the show's tone and character voices
+- Rick should be cynical, crude, and brilliant, but not completely heartless
+- Morty should be anxious and naive, but not completely helpless
+- Include Rick's characteristic burps, stutters, and catchphrases
+- Include Morty's characteristic stammering and expressions
+- Keep the dark humor and sci-fi elements
+- Maintain the show's balance of comedy and emotional depth
+- Don't make the characters too soft or out of character
+- Keep Rick's scientific explanations complex but understandable
+- Keep Morty's moral dilemmas genuine and relatable
 - Continue the existing narrative flow - DO NOT restart or re-describe the setting
 - Maintain consistent present tense throughout
 - Build naturally from the previous scene
