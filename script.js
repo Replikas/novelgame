@@ -369,7 +369,8 @@ CRITICAL:
                 generatingIndicator.remove();
             }
             
-            // Provide fallback content to continue gameplay
+            // Provide fallback content to continue gameplay  
+            console.log('Using fallback dialogue system');
             const fallbackResponse = {
                 narrative: "The conversation continues in the garage...",
                 scene: [
@@ -633,40 +634,73 @@ CRITICAL:
     // Fix truncated JSON responses
     fixTruncatedJSON(jsonStr) {
         try {
-            // Find the last complete dialogue entry
-            const lastDialogueIndex = jsonStr.lastIndexOf('{"character"');
-            if (lastDialogueIndex === -1) {
-                return jsonStr;
+            console.log('Attempting to fix truncated JSON...');
+            
+            // Extract the narrative if it exists
+            let narrative = '';
+            const narrativeMatch = jsonStr.match(/"narrative":\s*"([^"]*(?:\\.[^"]*)*)"/);
+            if (narrativeMatch) {
+                narrative = narrativeMatch[1].replace(/\\"/g, '"');
             }
             
-            // Find where this dialogue entry should end
-            let braceCount = 0;
-            let inString = false;
-            let escaped = false;
-            let endIndex = lastDialogueIndex;
+            // Extract all complete dialogue entries
+            const dialoguePattern = /\{"character":\s*"([^"]+)",\s*"dialogue":\s*"([^"]*(?:\\.[^"]*)*)"\}/g;
+            const dialogues = [];
+            let match;
             
-            for (let i = lastDialogueIndex; i < jsonStr.length; i++) {
-                const char = jsonStr[i];
-                
-                if (!inString) {
-                    if (char === '{') braceCount++;
-                    else if (char === '}') {
-                        braceCount--;
-                        if (braceCount === 0) {
-                            endIndex = i;
-                            break;
-                        }
-                    }
-                    else if (char === '"') inString = true;
-                } else {
-                    if (char === '"' && !escaped) inString = false;
-                    escaped = (char === '\\' && !escaped);
+            while ((match = dialoguePattern.exec(jsonStr)) !== null) {
+                dialogues.push({
+                    character: match[1],
+                    text: match[2].replace(/\\"/g, '"')
+                });
+            }
+            
+            // Extract narrative entries within scene
+            const narrativePattern = /\{"narrative":\s*"([^"]*(?:\\.[^"]*)*)"\}/g;
+            const narratives = [];
+            let narrativeMatch2;
+            
+            while ((narrativeMatch2 = narrativePattern.exec(jsonStr)) !== null) {
+                narratives.push({
+                    narrative: narrativeMatch2[1].replace(/\\"/g, '"')
+                });
+            }
+            
+            // Combine dialogues and narratives in order they appear
+            const scene = [];
+            let dialogueIndex = 0;
+            let narrativeIndex = 0;
+            
+            // Simple alternating pattern for now
+            for (let i = 0; i < Math.max(dialogues.length, narratives.length) * 2; i++) {
+                if (i % 2 === 0 && dialogueIndex < dialogues.length) {
+                    scene.push(dialogues[dialogueIndex++]);
+                } else if (narrativeIndex < narratives.length) {
+                    scene.push(narratives[narrativeIndex++]);
                 }
             }
             
-            // Cut off at the complete dialogue entry and add proper ending
-            const fixedJson = jsonStr.substring(0, endIndex + 1) + '],"choices":["Continue the conversation","Ask what happened","Stay silent"]}';
-            return fixedJson;
+            // If no scene items found, create basic ones
+            if (scene.length === 0) {
+                scene.push(
+                    { character: 'Rick', text: 'Look, Morty, the portal gun is acting up again.' },
+                    { character: 'Morty', text: 'Aw geez, Rick, what does that mean for us?' }
+                );
+            }
+            
+            const fixedResponse = {
+                narrative: narrative || 'The conversation continues in the garage...',
+                scene: scene,
+                choices: [
+                    'Continue the conversation',
+                    'Ask what happened', 
+                    'Express concern'
+                ]
+            };
+            
+            console.log('Fixed response:', fixedResponse);
+            return JSON.stringify(fixedResponse);
+            
         } catch (e) {
             console.log('Failed to fix truncated JSON:', e.message);
             return jsonStr;
