@@ -81,6 +81,12 @@ AI Response → Content Parsing → UI Update → Await Next Choice
 - **Port Configuration**: Default port 5000 with automatic port waiting
 - **Asset Management**: All assets (HTML, CSS, JS, SVGs) served statically
 
+### Production Deployment (Render)
+- **Platform**: Render.com web service
+- **Configuration**: render.yaml with Python runtime
+- **Port Handling**: Dynamic PORT environment variable support
+- **Build Process**: Minimal requirements.txt (no dependencies needed)
+
 ### Production Considerations
 - **CDN Deployment**: Static files can be deployed to any web server or CDN
 - **API Key Management**: Secure API key storage needed for production
@@ -98,6 +104,9 @@ AI Response → Content Parsing → UI Update → Await Next Choice
   - Integrated Chutes API with DeepSeek model for story generation
   - Implemented character avatars and relationship tracking system
   - Added interactive choice system affecting story progression
+  - Added typing speed controls (slow/normal/fast/instant)
+  - Added loading animation (...) when generating story content
+  - Created Render deployment configuration (render.yaml)
 
 ## User Preferences
 

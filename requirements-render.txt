@@ -1,0 +1,2 @@
+# No Python dependencies required - using built-in http.server
+# This file exists for Render deployment compatibility
