@@ -60,20 +60,28 @@ class RickortyGame {
         });
     }
 
-    // Show loading indicator in dialogue box
+    // Show loading indicator below existing content
     showLoading() {
         const dialogueContent = document.getElementById('dialogueContent');
+        
+        // Remove any existing loading indicator
+        const existingLoading = document.getElementById('inlineLoading');
+        if (existingLoading) {
+            existingLoading.remove();
+        }
+        
         const loadingElement = document.createElement('div');
         loadingElement.className = 'inline-loading';
         loadingElement.id = 'inlineLoading';
-        loadingElement.innerHTML = '<div class="loading-dots">Generating story<span>.</span><span>.</span><span>.</span></div>';
+        loadingElement.innerHTML = '<div class="loading-dots">Writing<span>.</span><span>.</span><span>.</span></div>';
         
-        // Clear content and add loading
-        dialogueContent.innerHTML = '';
+        // Add loading below existing content
         dialogueContent.appendChild(loadingElement);
         
-        // Hide choice buttons while loading
-        document.getElementById('choicesContainer').innerHTML = '';
+        // Disable choice buttons while loading
+        const choiceButtons = document.querySelectorAll('.choice-btn');
+        choiceButtons.forEach(btn => btn.disabled = true);
+        
         document.getElementById('errorMessage').classList.add('hidden');
     }
 
@@ -109,15 +117,20 @@ class RickortyGame {
         
         this.updateRelationshipDisplay();
         
+        // Clear dialogue content for new game
+        document.getElementById('dialogueContent').innerHTML = '';
+        
+        this.showLoading();
+        
         // Initial story prompt
         const initialPrompt = this.buildPrompt("GAME_START", "The story begins. Rick and Morty have just returned to the garage after a dangerous mission that went wrong. Morty is visibly shaken and emotionally vulnerable, while Rick is trying to process what happened in his usual deflective way.");
         
         try {
             const response = await this.callLLM(initialPrompt);
             this.processLLMResponse(response);
-            this.hideLoading();
         } catch (error) {
             console.error('Failed to start game:', error);
+            this.hideLoading();
             this.showError('Failed to start the game. Please check your connection and try again.');
         }
     }
@@ -234,9 +247,8 @@ IMPORTANT: Use plain text for dialogue - no asterisks, markdown, or special form
             this.gameState.currentScene = parsedResponse;
             this.gameState.turnCount++;
             
-            // Clear previous content
-            const dialogueContent = document.getElementById('dialogueContent');
-            dialogueContent.innerHTML = '';
+            // Remove loading indicator but keep existing content
+            this.hideLoading();
             
             // Display narrative if present
             if (parsedResponse.narrative) {
