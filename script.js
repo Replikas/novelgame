@@ -557,7 +557,17 @@ Respond ONLY with the requested JSON structure. Do not include thinking tags, ex
         
         choices.forEach((choice, index) => {
             const button = document.createElement('button');
-            button.textContent = choice;
+            // Clean up the choice text by removing markdown formatting
+            const cleanChoice = choice
+                .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold
+                .replace(/\*(.*?)\*/g, '$1') // Remove italics
+                .replace(/_(.*?)_/g, '$1') // Remove underline
+                .replace(/\[(.*?)\]\((.*?)\)/g, '$1') // Remove markdown links
+                .replace(/`(.*?)`/g, '$1') // Remove code formatting
+                .replace(/^\s*[-*+]\s*/g, '') // Remove bullet points
+                .trim();
+            
+            button.textContent = cleanChoice;
             button.className = 'choice-btn';
             button.onclick = () => this.selectChoice(choice, index);
             choicesContainer.appendChild(button);
