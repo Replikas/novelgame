@@ -236,6 +236,7 @@ Respond with a JSON structure containing:
   "narrative": "Description of the current situation and environment",
   "scene": [
     {"character": "Rick/Morty", "dialogue": "What the character says or does"},
+    {"narrative": "Description of actions or environment"},
     {"character": "Rick/Morty", "dialogue": "What the character says or does"}
   ],
   "choices": [
@@ -413,8 +414,8 @@ Respond ONLY with the requested JSON structure. Do not include thinking tags, ex
             const fallbackResponse = {
                 narrative: "The scene continues...",
                 scene: [
-                    { character: 'Rick', text: 'Ugh, the portal gun is acting up again. Classic interdimensional interference.' },
-                    { character: 'Morty', text: 'Rick, I just want to know if we\'re safe now. That was really scary.' }
+                    { character: 'Rick', dialogue: 'Ugh, the portal gun is acting up again. Classic interdimensional interference.' },
+                    { character: 'Morty', dialogue: 'Rick, I just want to know if we\'re safe now. That was really scary.' }
                 ],
                 choices: [
                     "Check the equipment and ask Rick to explain what went wrong",
