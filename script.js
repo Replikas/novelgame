@@ -14,10 +14,6 @@ class RickortyGame {
             dialogue: 15,
             narrative: 12
         };
-        this.avatarReactions = {
-            rick: null,
-            morty: null
-        };
         
         this.initializeGame();
         this.bindEvents();
@@ -446,20 +442,14 @@ CRITICAL:
                 const dialogueLine = document.createElement('div');
                 dialogueLine.className = `dialogue-line ${item.character.toLowerCase()}`;
                 
-                const avatarContainer = document.createElement('div');
-                avatarContainer.className = 'avatar-container';
-                
                 const avatar = document.createElement('img');
                 avatar.className = 'character-avatar';
-                avatar.id = `avatar-${item.character.toLowerCase()}`;
                 avatar.src = `assets/${item.character.toLowerCase()}-avatar.jpg`;
                 avatar.alt = `${item.character} Avatar`;
                 avatar.onerror = () => {
                     console.error(`Failed to load avatar: ${avatar.src}`);
                     avatar.style.display = 'none';
                 };
-                
-                avatarContainer.appendChild(avatar);
                 
                 const textContainer = document.createElement('div');
                 textContainer.className = 'dialogue-text';
@@ -473,7 +463,7 @@ CRITICAL:
                 textContainer.appendChild(characterName);
                 textContainer.appendChild(dialogueText);
                 
-                dialogueLine.appendChild(avatarContainer);
+                dialogueLine.appendChild(avatar);
                 dialogueLine.appendChild(textContainer);
                 
                 dialogueContent.appendChild(dialogueLine);
@@ -483,9 +473,6 @@ CRITICAL:
                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
                     .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italics
                     .replace(/_(.*?)_/g, '<em>$1</em>'); // Underline to italics
-                
-                // Add avatar reaction based on dialogue content
-                this.addAvatarReaction(item.character, item.text);
                 
                 // Typewriter effect for dialogue
                 await this.typewriterEffectHTML(dialogueText, formattedText, this.typingSpeed.dialogue);
@@ -631,171 +618,7 @@ CRITICAL:
         }
     }
 
-    // Fix truncated JSON responses
-    fixTruncatedJSON(jsonStr) {
-        try {
-            console.log('Attempting to fix truncated JSON...');
-            
-            // Extract the narrative if it exists
-            let narrative = '';
-            const narrativeMatch = jsonStr.match(/"narrative":\s*"([^"]*(?:\\.[^"]*)*)"/);
-            if (narrativeMatch) {
-                narrative = narrativeMatch[1].replace(/\\"/g, '"');
-            }
-            
-            // Extract all complete dialogue entries
-            const dialoguePattern = /\{"character":\s*"([^"]+)",\s*"dialogue":\s*"([^"]*(?:\\.[^"]*)*)"\}/g;
-            const dialogues = [];
-            let match;
-            
-            while ((match = dialoguePattern.exec(jsonStr)) !== null) {
-                dialogues.push({
-                    character: match[1],
-                    text: match[2].replace(/\\"/g, '"')
-                });
-            }
-            
-            // Extract narrative entries within scene
-            const narrativePattern = /\{"narrative":\s*"([^"]*(?:\\.[^"]*)*)"\}/g;
-            const narratives = [];
-            let narrativeMatch2;
-            
-            while ((narrativeMatch2 = narrativePattern.exec(jsonStr)) !== null) {
-                narratives.push({
-                    narrative: narrativeMatch2[1].replace(/\\"/g, '"')
-                });
-            }
-            
-            // Combine dialogues and narratives in order they appear
-            const scene = [];
-            let dialogueIndex = 0;
-            let narrativeIndex = 0;
-            
-            // Simple alternating pattern for now
-            for (let i = 0; i < Math.max(dialogues.length, narratives.length) * 2; i++) {
-                if (i % 2 === 0 && dialogueIndex < dialogues.length) {
-                    scene.push(dialogues[dialogueIndex++]);
-                } else if (narrativeIndex < narratives.length) {
-                    scene.push(narratives[narrativeIndex++]);
-                }
-            }
-            
-            // If no scene items found, create basic ones
-            if (scene.length === 0) {
-                scene.push(
-                    { character: 'Rick', text: 'Look, Morty, the portal gun is acting up again.' },
-                    { character: 'Morty', text: 'Aw geez, Rick, what does that mean for us?' }
-                );
-            }
-            
-            const fixedResponse = {
-                narrative: narrative || 'The conversation continues in the garage...',
-                scene: scene,
-                choices: [
-                    'Continue the conversation',
-                    'Ask what happened', 
-                    'Express concern'
-                ]
-            };
-            
-            console.log('Fixed response:', fixedResponse);
-            return JSON.stringify(fixedResponse);
-            
-        } catch (e) {
-            console.log('Failed to fix truncated JSON:', e.message);
-            return jsonStr;
-        }
-    }
 
-    // Add avatar reaction based on dialogue content
-    addAvatarReaction(character, text) {
-        const characterKey = character.toLowerCase();
-        const avatarId = `avatar-${characterKey}`;
-        const avatar = document.getElementById(avatarId);
-        
-        if (!avatar) return;
-        
-        // Remove existing reaction
-        const existingReaction = avatar.parentElement.querySelector('.avatar-reaction');
-        if (existingReaction) {
-            existingReaction.remove();
-        }
-        
-        // Determine reaction based on text content
-        let reaction = this.determineReaction(text, character);
-        
-        if (reaction) {
-            const reactionElement = document.createElement('div');
-            reactionElement.className = `avatar-reaction reaction-${reaction.type}`;
-            reactionElement.textContent = reaction.emoji;
-            reactionElement.title = reaction.description;
-            
-            avatar.parentElement.appendChild(reactionElement);
-            
-            // Remove reaction after 3 seconds
-            setTimeout(() => {
-                if (reactionElement.parentElement) {
-                    reactionElement.remove();
-                }
-            }, 3000);
-        }
-    }
-    
-    // Determine reaction based on dialogue content and character
-    determineReaction(text, character) {
-        const lowerText = text.toLowerCase();
-        
-        // Character-specific reactions
-        if (character === 'Rick') {
-            if (lowerText.includes('burp') || lowerText.includes('*burp*')) {
-                return { type: 'confused', emoji: '🍺', description: 'Burping' };
-            }
-            if (lowerText.includes('morty') && (lowerText.includes('idiot') || lowerText.includes('stupid'))) {
-                return { type: 'angry', emoji: '😤', description: 'Annoyed' };
-            }
-            if (lowerText.includes('science') || lowerText.includes('genius')) {
-                return { type: 'happy', emoji: '🧠', description: 'Proud' };
-            }
-            if (lowerText.includes('sorry') || lowerText.includes('my bad')) {
-                return { type: 'surprised', emoji: '😯', description: 'Surprised' };
-            }
-        } else if (character === 'Morty') {
-            if (lowerText.includes('rick') && lowerText.includes('!')) {
-                return { type: 'surprised', emoji: '😰', description: 'Worried' };
-            }
-            if (lowerText.includes('geez') || lowerText.includes('oh man')) {
-                return { type: 'confused', emoji: '😅', description: 'Nervous' };
-            }
-            if (lowerText.includes('sorry') || lowerText.includes('i didn\'t mean')) {
-                return { type: 'sad', emoji: '😔', description: 'Apologetic' };
-            }
-            if (lowerText.includes('thanks') || lowerText.includes('appreciate')) {
-                return { type: 'happy', emoji: '😊', description: 'Grateful' };
-            }
-        }
-        
-        // General emotional reactions
-        if (lowerText.includes('angry') || lowerText.includes('mad') || lowerText.includes('furious')) {
-            return { type: 'angry', emoji: '😠', description: 'Angry' };
-        }
-        if (lowerText.includes('happy') || lowerText.includes('glad') || lowerText.includes('excited')) {
-            return { type: 'happy', emoji: '😄', description: 'Happy' };
-        }
-        if (lowerText.includes('sad') || lowerText.includes('upset') || lowerText.includes('crying')) {
-            return { type: 'sad', emoji: '😢', description: 'Sad' };
-        }
-        if (lowerText.includes('surprised') || lowerText.includes('shocked') || lowerText.includes('wow')) {
-            return { type: 'surprised', emoji: '😲', description: 'Surprised' };
-        }
-        if (lowerText.includes('confused') || lowerText.includes('what') || lowerText.includes('huh')) {
-            return { type: 'confused', emoji: '🤔', description: 'Confused' };
-        }
-        if (lowerText.includes('blush') || lowerText.includes('embarrassed') || lowerText.includes('awkward')) {
-            return { type: 'blush', emoji: '😊', description: 'Blushing' };
-        }
-        
-        return null;
-    }
 
     // Retry connection
     retryConnection() {
