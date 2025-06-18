@@ -1,2 +1,6 @@
 # No Python dependencies required - using built-in http.server
 # This file exists for Render deployment compatibility
+
+# Required Python packages
+urllib3>=1.26.0
+requests>=2.25.0
