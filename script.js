@@ -117,8 +117,10 @@ class RickortyGame {
         
         this.updateRelationshipDisplay();
         
-        // Clear dialogue content for new game
-        document.getElementById('dialogueContent').innerHTML = '';
+        // Only clear content if this is truly a restart, not initial load
+        if (this.gameState.turnCount > 0) {
+            document.getElementById('dialogueContent').innerHTML = '';
+        }
         
         this.showLoading();
         
@@ -379,9 +381,8 @@ IMPORTANT: Use plain text for dialogue - no asterisks, markdown, or special form
 
     // Handle choice selection
     async selectChoice(choice, index) {
-        // Disable all choice buttons
-        const choiceButtons = document.querySelectorAll('.choice-btn');
-        choiceButtons.forEach(btn => btn.disabled = true);
+        // Remove choice buttons
+        document.getElementById('choicesContainer').innerHTML = '';
         
         this.showLoading();
         
@@ -392,12 +393,10 @@ IMPORTANT: Use plain text for dialogue - no asterisks, markdown, or special form
             const prompt = this.buildPrompt(choice);
             const response = await this.callLLM(prompt);
             this.processLLMResponse(response);
-            this.hideLoading();
         } catch (error) {
             console.error('Failed to get next scene:', error);
+            this.hideLoading();
             this.showError('Failed to continue the story. Please try again.');
-            // Re-enable buttons on error
-            choiceButtons.forEach(btn => btn.disabled = false);
         }
     }
 
@@ -443,8 +442,9 @@ IMPORTANT: Use plain text for dialogue - no asterisks, markdown, or special form
     // Restart game
     restartGame() {
         if (confirm('Are you sure you want to restart the story? All progress will be lost.')) {
-            // Clear dialogue content
+            // Clear dialogue content and choices
             document.getElementById('dialogueContent').innerHTML = '';
+            document.getElementById('choicesContainer').innerHTML = '';
             this.startNewGame();
         }
     }
