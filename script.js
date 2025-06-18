@@ -153,7 +153,9 @@ Respond in this exact JSON format:
   ]
 }
 
-Make the dialogue authentic - Rick should be sharp-tongued but show hints of care, Morty should be genuine and reactive to Rick's behavior. Use rich narrative sections to show character emotions, environmental details, and psychological tension between dialogue exchanges. The narrative should paint a vivid picture of the scene and characters' internal states.`;
+Make the dialogue authentic - Rick should be sharp-tongued but show hints of care, Morty should be genuine and reactive to Rick's behavior. Use rich narrative sections to show character emotions, environmental details, and psychological tension between dialogue exchanges. The narrative should paint a vivid picture of the scene and characters' internal states.
+
+IMPORTANT: Use plain text for dialogue - no asterisks, markdown, or special formatting characters. Keep dialogue natural and conversational.`;
     }
 
     // Call the LLM API
@@ -305,7 +307,12 @@ Make the dialogue authentic - Rick should be sharp-tongued but show hints of car
                 characterName.textContent = item.character;
                 
                 const dialogueText = document.createElement('div');
-                dialogueText.textContent = item.dialogue;
+                // Process basic markdown formatting
+                let formattedText = item.dialogue
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italics
+                    .replace(/_(.*?)_/g, '<em>$1</em>'); // Underline to italics
+                dialogueText.innerHTML = formattedText;
                 
                 textContainer.appendChild(characterName);
                 textContainer.appendChild(dialogueText);
