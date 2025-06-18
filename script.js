@@ -235,8 +235,8 @@ Respond with a JSON structure containing:
 {
   "narrative": "Description of the current situation and environment",
   "scene": [
-    {"character": "Rick/Morty", "text": "Dialogue or action description"},
-    {"character": "Rick/Morty", "text": "Dialogue or action description"}
+    {"character": "Rick/Morty", "dialogue": "What the character says or does"},
+    {"character": "Rick/Morty", "dialogue": "What the character says or does"}
   ],
   "choices": [
     "First choice - includes both dialogue and physical action",
