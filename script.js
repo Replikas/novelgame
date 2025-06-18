@@ -362,7 +362,36 @@ CRITICAL:
         } catch (error) {
             console.error('Failed to process LLM response:', error);
             console.error('Raw response:', response);
-            this.showError('Failed to process the story response. Please try again.');
+            
+            // Remove generating indicator
+            const generatingIndicator = document.getElementById('generatingIndicator');
+            if (generatingIndicator) {
+                generatingIndicator.remove();
+            }
+            
+            // Provide fallback content to continue gameplay
+            const fallbackResponse = {
+                narrative: "The conversation continues in the garage...",
+                scene: [
+                    { character: 'Rick', text: 'Ugh, the portal gun is acting up again. Classic interdimensional interference.' },
+                    { character: 'Morty', text: 'Rick, I just want to know if we\'re safe now. That was really scary.' }
+                ],
+                choices: [
+                    "Ask Rick to explain what went wrong",
+                    "Suggest checking the equipment for damage", 
+                    "Express relief that you both made it back"
+                ]
+            };
+            
+            if (fallbackResponse.narrative) {
+                await this.displayNarrative(fallbackResponse.narrative);
+            }
+            await this.displayScene(fallbackResponse.scene);
+            this.displayChoices(fallbackResponse.choices);
+            
+            // Auto-scroll to bottom to show new content
+            const dialogueContainer = document.getElementById('dialogueContainer');
+            dialogueContainer.scrollTop = dialogueContainer.scrollHeight;
         }
     }
 
