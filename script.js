@@ -31,7 +31,9 @@ class RickortyGame {
 
     // Initialize the game
     async initializeGame() {
-        this.showLoading();
+        // Show game content immediately
+        document.getElementById('loadingScreen').classList.add('hidden');
+        document.getElementById('gameContent').classList.remove('hidden');
         
         // Load configuration first
         const configLoaded = await this.loadConfig();
@@ -58,17 +60,29 @@ class RickortyGame {
         });
     }
 
-    // Show loading screen
+    // Show loading indicator in dialogue box
     showLoading() {
-        document.getElementById('loadingScreen').classList.remove('hidden');
-        document.getElementById('gameContent').classList.add('hidden');
+        const dialogueContent = document.getElementById('dialogueContent');
+        const loadingElement = document.createElement('div');
+        loadingElement.className = 'inline-loading';
+        loadingElement.id = 'inlineLoading';
+        loadingElement.innerHTML = '<div class="loading-dots">Generating story<span>.</span><span>.</span><span>.</span></div>';
+        
+        // Clear content and add loading
+        dialogueContent.innerHTML = '';
+        dialogueContent.appendChild(loadingElement);
+        
+        // Hide choice buttons while loading
+        document.getElementById('choicesContainer').innerHTML = '';
         document.getElementById('errorMessage').classList.add('hidden');
     }
 
-    // Hide loading screen
+    // Hide loading indicator
     hideLoading() {
-        document.getElementById('loadingScreen').classList.add('hidden');
-        document.getElementById('gameContent').classList.remove('hidden');
+        const inlineLoading = document.getElementById('inlineLoading');
+        if (inlineLoading) {
+            inlineLoading.remove();
+        }
     }
 
     // Show error message
