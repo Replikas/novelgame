@@ -136,6 +136,7 @@ class RickortyGame {
         
         // Clear content for new game
         document.getElementById('dialogueContent').innerHTML = '';
+        document.getElementById('choicesContainer').innerHTML = '';
         
         // Initial story prompt
         const initialPrompt = this.buildPrompt("GAME_START", "The story begins. Rick and Morty have just returned to the garage after a dangerous mission that went wrong. Morty is visibly shaken and emotionally vulnerable, while Rick is trying to process what happened in his usual deflective way.");
@@ -261,16 +262,17 @@ IMPORTANT: Use plain text for dialogue - no asterisks, markdown, or special form
             this.gameState.currentScene = parsedResponse;
             this.gameState.turnCount++;
             
-            // Clear previous content and display new scene
-            document.getElementById('dialogueContent').innerHTML = '';
-            
-            // Display content with typewriter effect
+            // Display content with typewriter effect (keep previous content)
             if (parsedResponse.narrative) {
                 await this.displayNarrative(parsedResponse.narrative);
             }
             
             await this.displayScene(parsedResponse.scene);
             this.displayChoices(parsedResponse.choices);
+            
+            // Auto-scroll to bottom to show new content
+            const dialogueContainer = document.getElementById('dialogueContainer');
+            dialogueContainer.scrollTop = dialogueContainer.scrollHeight;
             
         } catch (error) {
             console.error('Failed to process LLM response:', error);
