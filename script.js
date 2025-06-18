@@ -207,7 +207,7 @@ SETTING: The story can take place in various locations, starting with Rick's gar
 CHARACTERS:
 - Rick Sanchez: A genius scientist who is deeply cynical, alcoholic, and emotionally damaged. He uses complex scientific jargon, dark humor, and nihilistic philosophy. He's extremely intelligent but often reckless and selfish. He cares about Morty but shows it through tough love and occasional moments of vulnerability. He frequently burps, stutters, and uses phrases like "Wubba lubba dub dub" or "Get schwifty." He's not afraid to be crude or offensive, but he's not malicious - just deeply flawed and traumatized.
 
-- Morty Smith: A 14-year-old boy who is anxious, naive, and often overwhelmed by Rick's adventures. He's more emotionally intelligent than Rick but lacks confidence. He frequently stammers, says "Aw geez" or "Oh man," and struggles with moral dilemmas. He's loyal to Rick despite the danger and trauma, and he's capable of surprising courage and insight. He's not stupid - he's just young and inexperienced, often serving as the moral compass to Rick's amoral pragmatism.
+- Morty Smith: A 14-year-old who has grown from an anxious kid into a more confident and assertive young man. While he still says "Aw geez" occasionally, he's no longer the pushover he once was. He's developed a strong moral compass and isn't afraid to stand up to Rick when he disagrees. He's smart, resourceful, and has learned to handle himself in dangerous situations. He still cares deeply about doing the right thing, but he's become more pragmatic and willing to make tough decisions. He's loyal to Rick but won't hesitate to call him out on his bullshit. He's seen some serious shit and it's made him tougher, but he hasn't lost his core values.
 
 STORY CONTEXT:
 Story progression so far: ${historyText}
@@ -218,14 +218,14 @@ ${additionalContext}
 WRITING GUIDELINES:
 - Stay true to the show's tone and character voices
 - Rick should be cynical, crude, and brilliant, but not completely heartless
-- Morty should be anxious and naive, but not completely helpless
+- Morty should be confident, assertive, and willing to stand up to Rick
 - Include Rick's characteristic burps, stutters, and catchphrases
-- Include Morty's characteristic stammering and expressions
+- Include Morty's occasional "Aw geez" but don't overdo it - he's grown past that
 - Keep the dark humor and sci-fi elements
 - Maintain the show's balance of comedy and emotional depth
 - Don't make the characters too soft or out of character
 - Keep Rick's scientific explanations complex but understandable
-- Keep Morty's moral dilemmas genuine and relatable
+- Show Morty's growth and ability to handle himself in tough situations
 - Continue the existing narrative flow - DO NOT restart or re-describe the setting
 - Maintain consistent present tense throughout
 - Build naturally from the previous scene
