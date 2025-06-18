@@ -249,7 +249,7 @@ Keep dialogue authentic to the characters. Rick should be sarcastic and deflecti
             
             const avatar = document.createElement('img');
             avatar.className = 'character-avatar';
-            avatar.src = `assets/${line.character.toLowerCase()}-avatar.svg`;
+            avatar.src = `assets/${line.character.toLowerCase()}-avatar.jpg`;
             avatar.alt = `${line.character} Avatar`;
             avatar.onerror = () => {
                 // Fallback if avatar image fails to load

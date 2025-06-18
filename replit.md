@@ -93,7 +93,11 @@ AI Response → Content Parsing → UI Update → Await Next Choice
 - **Parallel Execution**: Workflow supports concurrent task execution
 
 ## Changelog
-- June 18, 2025. Initial setup
+- June 18, 2025: Initial setup and complete implementation
+  - Built full visual novel game with AI-powered dialogue
+  - Integrated Chutes API with DeepSeek model for story generation
+  - Implemented character avatars and relationship tracking system
+  - Added interactive choice system affecting story progression
 
 ## User Preferences
 
