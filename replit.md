@@ -106,6 +106,7 @@ AI Response → Content Parsing → UI Update → Await Next Choice
   - Added interactive choice system affecting story progression
   - Added typing speed controls (slow/normal/fast/instant)
   - Added loading animation (...) when generating story content
+  - Added simple mood indicators on avatars (post-dialogue rendering)
   - Created Render deployment configuration (render.yaml)
 
 ## User Preferences
@@ -118,3 +119,4 @@ UI preferences:
 - Readable story progression with complete history visible
 - Loading animation (...) when generating new content after choices
 - Speed selector for typing effect (slow/normal/fast/instant)
+- Small mood indicators on avatars based on dialogue content
