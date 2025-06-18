@@ -29,6 +29,11 @@ class GameHandler(http.server.SimpleHTTPRequestHandler):
 
 if __name__ == "__main__":
     PORT = 5000
-    with socketserver.TCPServer(("0.0.0.0", PORT), GameHandler) as httpd:
+    
+    # Allow port reuse to avoid "Address already in use" error
+    class ReusableTCPServer(socketserver.TCPServer):
+        allow_reuse_address = True
+    
+    with ReusableTCPServer(("0.0.0.0", PORT), GameHandler) as httpd:
         print(f"Serving at http://0.0.0.0:{PORT}")
         httpd.serve_forever()

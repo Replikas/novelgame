@@ -17,16 +17,16 @@ class RickortyGame {
 
     // Load configuration from server
     async loadConfig() {
-        try {
-            const response = await fetch('/api/config');
-            const config = await response.json();
-            this.apiKey = config.apiKey;
-            this.apiEndpoint = config.apiEndpoint;
+        // Use configuration from loaded config file
+        if (window.gameConfig) {
+            this.apiKey = window.gameConfig.apiKey;
+            this.apiEndpoint = window.gameConfig.apiEndpoint;
             return true;
-        } catch (error) {
-            console.error('Failed to load config:', error);
-            return false;
         }
+        
+        // Fallback if config not loaded
+        this.showError('Game configuration not loaded. Please refresh the page.');
+        return false;
     }
 
     // Initialize the game
