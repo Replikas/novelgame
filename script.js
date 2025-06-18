@@ -10,6 +10,10 @@ class RickortyGame {
             isGameOver: false,
             turnCount: 0
         };
+        this.typingSpeed = {
+            dialogue: 15,
+            narrative: 12
+        };
         
         this.initializeGame();
         this.bindEvents();
@@ -51,6 +55,7 @@ class RickortyGame {
         document.getElementById('historyBtn').addEventListener('click', () => this.showHistory());
         document.getElementById('closeHistoryBtn').addEventListener('click', () => this.hideHistory());
         document.getElementById('retryBtn').addEventListener('click', () => this.retryConnection());
+        document.getElementById('speedSelect').addEventListener('change', (e) => this.updateTypingSpeed(e.target.value));
         
         // Close modal when clicking outside
         document.getElementById('historyModal').addEventListener('click', (e) => {
@@ -119,6 +124,13 @@ class RickortyGame {
         choiceElement.innerHTML = `<strong>You:</strong> ${choice}`;
         
         dialogueContent.appendChild(choiceElement);
+        
+        // Add generating indicator
+        const generatingElement = document.createElement('div');
+        generatingElement.className = 'generating-indicator';
+        generatingElement.id = 'generatingIndicator';
+        generatingElement.innerHTML = '<span class="dots">...</span>';
+        dialogueContent.appendChild(generatingElement);
         
         // Auto-scroll to show new content
         const dialogueContainer = document.getElementById('dialogueContainer');
@@ -309,6 +321,12 @@ CRITICAL:
             this.gameState.currentScene = parsedResponse;
             this.gameState.turnCount++;
             
+            // Remove generating indicator
+            const generatingIndicator = document.getElementById('generatingIndicator');
+            if (generatingIndicator) {
+                generatingIndicator.remove();
+            }
+            
             // Display content with typewriter effect (keep previous content)
             if (parsedResponse.narrative) {
                 await this.displayNarrative(parsedResponse.narrative);
@@ -365,7 +383,7 @@ CRITICAL:
         dialogueContent.appendChild(narrativeElement);
         
         // Typewriter effect for narrative
-        await this.typewriterEffectHTML(narrativeElement, `<em>${narrative}</em>`, 12);
+        await this.typewriterEffectHTML(narrativeElement, `<em>${narrative}</em>`, this.typingSpeed.narrative);
     }
 
     // Display scene dialogue and narrative with typewriter effect
@@ -411,7 +429,7 @@ CRITICAL:
                     .replace(/_(.*?)_/g, '<em>$1</em>'); // Underline to italics
                 
                 // Typewriter effect for dialogue
-                await this.typewriterEffectHTML(dialogueText, formattedText, 15);
+                await this.typewriterEffectHTML(dialogueText, formattedText, this.typingSpeed.dialogue);
                 
             } else if (item.narrative) {
                 // This is narrative text between dialogue
@@ -421,7 +439,7 @@ CRITICAL:
                 dialogueContent.appendChild(narrativeElement);
                 
                 // Typewriter effect for narrative
-                await this.typewriterEffectHTML(narrativeElement, `<em>${item.narrative}</em>`, 12);
+                await this.typewriterEffectHTML(narrativeElement, `<em>${item.narrative}</em>`, this.typingSpeed.narrative);
             }
         }
         
@@ -534,6 +552,24 @@ CRITICAL:
     // Hide history modal
     hideHistory() {
         document.getElementById('historyModal').style.display = 'none';
+    }
+
+    // Update typing speed
+    updateTypingSpeed(speed) {
+        switch(speed) {
+            case 'slow':
+                this.typingSpeed = { dialogue: 30, narrative: 25 };
+                break;
+            case 'normal':
+                this.typingSpeed = { dialogue: 15, narrative: 12 };
+                break;
+            case 'fast':
+                this.typingSpeed = { dialogue: 5, narrative: 3 };
+                break;
+            case 'instant':
+                this.typingSpeed = { dialogue: 0, narrative: 0 };
+                break;
+        }
     }
 
     // Retry connection
