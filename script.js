@@ -547,7 +547,7 @@ Respond ONLY with the requested JSON structure. Do not include thinking tags, ex
         choices.forEach((choice, index) => {
             const button = document.createElement('button');
             button.textContent = choice;
-            button.className = 'choice-button';
+            button.className = 'choice-btn';
             button.onclick = () => this.selectChoice(choice, index);
             choicesContainer.appendChild(button);
         });
@@ -556,7 +556,7 @@ Respond ONLY with the requested JSON structure. Do not include thinking tags, ex
     // Handle choice selection
     async selectChoice(choice, index) {
         // Disable all choice buttons
-        const buttons = document.querySelectorAll('.choice-button');
+        const buttons = document.querySelectorAll('.choice-btn');
         buttons.forEach(button => button.disabled = true);
 
         // Add the choice to history
@@ -568,7 +568,8 @@ Respond ONLY with the requested JSON structure. Do not include thinking tags, ex
         // Show generating indicator
         const generatingIndicator = document.createElement('div');
         generatingIndicator.id = 'generatingIndicator';
-        generatingIndicator.textContent = 'Generating next scene...';
+        generatingIndicator.className = 'generating-indicator';
+        generatingIndicator.innerHTML = 'Generating next scene<span class="dots">...</span>';
         document.getElementById('dialogueContainer').appendChild(generatingIndicator);
 
         try {
