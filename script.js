@@ -5,7 +5,7 @@ class RickortyGame {
         this.apiEndpoint = 'https://llm.chutes.ai/v1/chat/completions';
         this.gameState = {
             storyHistory: [],
-            relationshipLevel: 50, // 0-100 scale, starting at neutral (50) for their established relationship
+            relationshipLevel: 0, // 0-100 scale, starting at 0 (strained)
             currentScene: null,
             isGameOver: false,
             turnCount: 0
@@ -162,7 +162,7 @@ class RickortyGame {
     async startNewGame() {
         this.gameState = {
             storyHistory: [],
-            relationshipLevel: 50, // Starting at neutral (50) for their established relationship
+            relationshipLevel: 0, // Starting at 0 (strained)
             currentScene: null,
             isGameOver: false,
             turnCount: 0
@@ -532,8 +532,11 @@ CRITICAL:
 
     // Update relationship level
     updateRelationship(choiceIndex) {
-        // Simple relationship logic - first choice increases, second neutral, third decreases
-        const changes = [2, 0, -1];
+        // More gradual relationship changes
+        // First choice: small positive change
+        // Second choice: neutral
+        // Third choice: small negative change
+        const changes = [1, 0, -1];
         const change = changes[choiceIndex] || 0;
         
         this.gameState.relationshipLevel = Math.max(0, Math.min(100, this.gameState.relationshipLevel + change));
@@ -548,10 +551,14 @@ CRITICAL:
         fillElement.style.width = `${this.gameState.relationshipLevel}%`;
         
         let status;
-        if (this.gameState.relationshipLevel < 30) {
+        if (this.gameState.relationshipLevel < 20) {
+            status = 'Very Tense';
+        } else if (this.gameState.relationshipLevel < 40) {
             status = 'Tense';
-        } else if (this.gameState.relationshipLevel < 70) {
+        } else if (this.gameState.relationshipLevel < 60) {
             status = 'Neutral';
+        } else if (this.gameState.relationshipLevel < 80) {
+            status = 'Friendly';
         } else {
             status = 'Close';
         }
