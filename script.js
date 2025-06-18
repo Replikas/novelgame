@@ -442,9 +442,6 @@ CRITICAL:
                 const dialogueLine = document.createElement('div');
                 dialogueLine.className = `dialogue-line ${item.character.toLowerCase()}`;
                 
-                const avatarWrapper = document.createElement('div');
-                avatarWrapper.className = 'avatar-wrapper';
-                
                 const avatar = document.createElement('img');
                 avatar.className = 'character-avatar';
                 avatar.src = `assets/${item.character.toLowerCase()}-avatar.jpg`;
@@ -453,8 +450,6 @@ CRITICAL:
                     console.error(`Failed to load avatar: ${avatar.src}`);
                     avatar.style.display = 'none';
                 };
-                
-                avatarWrapper.appendChild(avatar);
                 
                 const textContainer = document.createElement('div');
                 textContainer.className = 'dialogue-text';
@@ -468,7 +463,7 @@ CRITICAL:
                 textContainer.appendChild(characterName);
                 textContainer.appendChild(dialogueText);
                 
-                dialogueLine.appendChild(avatarWrapper);
+                dialogueLine.appendChild(avatar);
                 dialogueLine.appendChild(textContainer);
                 
                 dialogueContent.appendChild(dialogueLine);
@@ -481,9 +476,6 @@ CRITICAL:
                 
                 // Typewriter effect for dialogue
                 await this.typewriterEffectHTML(dialogueText, formattedText, this.typingSpeed.dialogue);
-                
-                // Add mood indicator after dialogue is complete
-                this.addMoodIndicator(avatarWrapper, item.character, item.text);
                 
             } else if (item.narrative) {
                 // This is narrative text between dialogue
@@ -628,55 +620,7 @@ CRITICAL:
 
 
 
-    // Add mood indicator based on dialogue content
-    addMoodIndicator(avatarWrapper, character, text) {
-        // Remove existing mood indicator
-        const existingMood = avatarWrapper.querySelector('.mood-indicator');
-        if (existingMood) {
-            existingMood.remove();
-        }
-        
-        const mood = this.detectMood(character, text);
-        if (mood) {
-            const moodElement = document.createElement('div');
-            moodElement.className = 'mood-indicator';
-            moodElement.textContent = mood.emoji;
-            moodElement.title = mood.description;
-            
-            avatarWrapper.appendChild(moodElement);
-            
-            // Remove mood after 4 seconds
-            setTimeout(() => {
-                if (moodElement.parentElement) {
-                    moodElement.remove();
-                }
-            }, 4000);
-        }
-    }
-    
-    // Detect mood from dialogue (simple keyword-based system)
-    detectMood(character, text) {
-        const lowerText = text.toLowerCase();
-        
-        // Character-specific moods
-        if (character === 'Rick') {
-            if (lowerText.includes('burp') || lowerText.includes('*burp*')) return { emoji: '🍺', description: 'Burping' };
-            if (lowerText.includes('science') || lowerText.includes('genius')) return { emoji: '🧠', description: 'Proud' };
-            if (lowerText.includes('morty') && (lowerText.includes('idiot') || lowerText.includes('stupid'))) return { emoji: '😤', description: 'Annoyed' };
-        } else if (character === 'Morty') {
-            if (lowerText.includes('geez') || lowerText.includes('oh man')) return { emoji: '😅', description: 'Nervous' };
-            if (lowerText.includes('rick') && lowerText.includes('!')) return { emoji: '😰', description: 'Worried' };
-        }
-        
-        // General moods
-        if (lowerText.includes('angry') || lowerText.includes('mad')) return { emoji: '😠', description: 'Angry' };
-        if (lowerText.includes('happy') || lowerText.includes('glad')) return { emoji: '😊', description: 'Happy' };
-        if (lowerText.includes('sad') || lowerText.includes('upset')) return { emoji: '😢', description: 'Sad' };
-        if (lowerText.includes('surprised') || lowerText.includes('wow')) return { emoji: '😲', description: 'Surprised' };
-        if (lowerText.includes('confused') || lowerText.includes('what')) return { emoji: '🤔', description: 'Confused' };
-        
-        return null;
-    }
+
 
     // Retry connection
     retryConnection() {
