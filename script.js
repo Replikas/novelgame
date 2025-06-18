@@ -365,7 +365,7 @@ CRITICAL:
         dialogueContent.appendChild(narrativeElement);
         
         // Typewriter effect for narrative
-        await this.typewriterEffectHTML(narrativeElement, `<em>${narrative}</em>`, 5);
+        await this.typewriterEffectHTML(narrativeElement, `<em>${narrative}</em>`, 12);
     }
 
     // Display scene dialogue and narrative with typewriter effect
@@ -411,7 +411,7 @@ CRITICAL:
                     .replace(/_(.*?)_/g, '<em>$1</em>'); // Underline to italics
                 
                 // Typewriter effect for dialogue
-                await this.typewriterEffectHTML(dialogueText, formattedText, 8);
+                await this.typewriterEffectHTML(dialogueText, formattedText, 15);
                 
             } else if (item.narrative) {
                 // This is narrative text between dialogue
@@ -421,7 +421,7 @@ CRITICAL:
                 dialogueContent.appendChild(narrativeElement);
                 
                 // Typewriter effect for narrative
-                await this.typewriterEffectHTML(narrativeElement, `<em>${item.narrative}</em>`, 5);
+                await this.typewriterEffectHTML(narrativeElement, `<em>${item.narrative}</em>`, 12);
             }
         }
         
