@@ -134,10 +134,8 @@ class RickortyGame {
         
         this.updateRelationshipDisplay();
         
-        // Only clear content if this is truly a restart, not initial load
-        if (this.gameState.turnCount > 0) {
-            document.getElementById('dialogueContent').innerHTML = '';
-        }
+        // Clear content for new game
+        document.getElementById('dialogueContent').innerHTML = '';
         
         // Initial story prompt
         const initialPrompt = this.buildPrompt("GAME_START", "The story begins. Rick and Morty have just returned to the garage after a dangerous mission that went wrong. Morty is visibly shaken and emotionally vulnerable, while Rick is trying to process what happened in his usual deflective way.");
@@ -262,6 +260,9 @@ IMPORTANT: Use plain text for dialogue - no asterisks, markdown, or special form
 
             this.gameState.currentScene = parsedResponse;
             this.gameState.turnCount++;
+            
+            // Clear previous content and display new scene
+            document.getElementById('dialogueContent').innerHTML = '';
             
             // Display content with typewriter effect
             if (parsedResponse.narrative) {
@@ -474,8 +475,8 @@ IMPORTANT: Use plain text for dialogue - no asterisks, markdown, or special form
             historyContent.innerHTML = '<p>No story history yet.</p>';
         } else {
             historyContent.innerHTML = this.gameState.storyHistory
-                .map(scene => `<div class="history-entry">${scene.replace(/\n/g, '<br>')}</div>`)
-                .join('<hr>');
+                .map((scene, index) => `<div class="history-entry"><strong>Scene ${index + 1}:</strong><br>${scene.replace(/\n/g, '<br>')}</div>`)
+                .join('<hr style="border-color: #333; margin: 20px 0;">');
         }
         
         modal.style.display = 'block';

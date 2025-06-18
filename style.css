@@ -147,9 +147,12 @@ body {
     border: 2px solid #333;
     border-radius: 10px;
     padding: 25px;
-    min-height: 300px;
+    min-height: 400px;
     max-height: 500px;
-    overflow-y: auto;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .dialogue-content {
@@ -332,6 +335,15 @@ body {
 .modal-body {
     padding: 20px;
     line-height: 1.6;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.history-entry {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #2a2a2a;
+    border-radius: 5px;
 }
 
 /* Error Message */

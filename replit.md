@@ -102,4 +102,7 @@ AI Response → Content Parsing → UI Update → Await Next Choice
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
-UI preferences: No loading indicators, prefer typewriter/streaming text effect as story content is displayed.
+UI preferences: 
+- No loading indicators, prefer typewriter/streaming text effect as story content is displayed
+- Visual novel style: each scene replaces previous content rather than accumulating in scrolling format
+- Scene-by-scene progression with history accessible via separate modal
