@@ -21,11 +21,11 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "./start_server.sh"
+args = "python -m http.server 5000"
 waitForPort = 5000
 
 [deployment]
-run = ["sh", "-c", "./start_server.sh"]
+run = ["sh", "-c", "python -m http.server 5000"]
 
 [[ports]]
 localPort = 5000
