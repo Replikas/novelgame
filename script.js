@@ -240,7 +240,8 @@ CRITICAL:
                 }
             ],
             max_tokens: 800,
-            temperature: 0.7
+            temperature: 0.7,
+            reasoning: false
         };
 
         const response = await fetch(this.apiEndpoint, {
