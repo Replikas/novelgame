@@ -221,17 +221,18 @@ CRITICAL:
 - Continue the story naturally - do not restart, reset, or re-establish the setting
 - Maintain present tense and story flow
 - ALWAYS alternate speakers - Rick responds first to Morty's choice, then they alternate
-- Use plain text for dialogue with no special formatting`;
+- Use plain text for dialogue with no special formatting
+- Respond ONLY with the JSON structure - no thinking tags, no explanations, just the JSON`;
     }
 
     // Call the LLM API
     async callLLM(prompt) {
         const requestBody = {
-            model: "Qwen/Qwen3-235B-A22B",
+            model: "deepseek-ai/DeepSeek-V3-0324",
             messages: [
                 {
                     role: "system",
-                    content: "You are a creative writing assistant specializing in character-driven dialogue for visual novels."
+                    content: "You are a creative writing assistant specializing in character-driven dialogue for visual novels. Respond only with the requested JSON format. Do not include thinking tags, explanations, or any text outside the JSON structure."
                 },
                 {
                     role: "user",
@@ -264,13 +265,34 @@ CRITICAL:
         try {
             let parsedResponse;
             
-            // Clean up response - remove markdown code blocks if present
+            // Clean up response - remove various wrapper tags and formatting
             let cleanResponse = response.trim();
-            if (cleanResponse.startsWith('```json')) {
-                cleanResponse = cleanResponse.replace(/^```json\s*/, '').replace(/\s*```$/, '');
-            } else if (cleanResponse.startsWith('```')) {
-                cleanResponse = cleanResponse.replace(/^```\s*/, '').replace(/\s*```$/, '');
+            
+            // Remove <think> tags and content
+            cleanResponse = cleanResponse.replace(/<think>[\s\S]*?<\/think>/g, '');
+            
+            // Remove markdown code blocks
+            if (cleanResponse.includes('```json')) {
+                const jsonMatch = cleanResponse.match(/```json\s*([\s\S]*?)\s*```/);
+                if (jsonMatch) {
+                    cleanResponse = jsonMatch[1].trim();
+                }
+            } else if (cleanResponse.includes('```')) {
+                const codeMatch = cleanResponse.match(/```\s*([\s\S]*?)\s*```/);
+                if (codeMatch) {
+                    cleanResponse = codeMatch[1].trim();
+                }
             }
+            
+            // Look for JSON content between braces if other methods fail
+            if (!cleanResponse.startsWith('{')) {
+                const jsonMatch = cleanResponse.match(/\{[\s\S]*\}/);
+                if (jsonMatch) {
+                    cleanResponse = jsonMatch[0];
+                }
+            }
+            
+            cleanResponse = cleanResponse.trim();
             
             try {
                 parsedResponse = JSON.parse(cleanResponse);
