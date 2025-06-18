@@ -1,0 +1,65 @@
+Project Brief: Rickorty: Fall Damage (Chutes-Integrated Visual Novel)
+
+Overview:
+Build a playable, browser-based visual novel using HTML, CSS, and JavaScript.  
+The game runs entirely client-side and integrates with a Chutes-hosted LLM (such as Qwen or DeepSeek) to dynamically generate dialogue and choices based on player input.
+
+Title:
+Rickorty: Fall Damage
+
+Characters:
+- Rick Sanchez – Sarcastic, emotionally guarded, highly intelligent
+- Morty Smith – Anxious, emotionally intuitive, reactive
+
+Style & Tone:
+- Slow-burn romance with emotional tension, sarcasm, and branching dialogue
+- The story is player-driven with multiple paths and outcomes
+- Dialogue is generated in-character using the LLM
+
+Story Setup:
+- Opening scene: Rick and Morty are alone in the garage after a failed mission.
+- Morty is shaken; Rick deflects with sarcasm.
+- The player chooses how Morty responds, setting the tone for their relationship arc.
+
+Core Features:
+- Fully browser-based (no installs)
+- Responsive UI, mobile-friendly
+- Uses Chutes AI LLM to generate:
+  - Dialogue segments
+  - 2–3 player choices per scene
+- Relationship tracker (affection/tension) that influences the tone of replies
+- Multiple endings: romantic, platonic, bittersweet
+- Restart button to reset and replay the story
+- Clean, simple UI:
+  - Black background
+  - White text box for dialogue
+  - Buttons for choices
+
+Avatar Feature:
+- Each line of dialogue includes an inline avatar image next to the speaker’s text
+- One avatar for Rick, one for Morty
+- The user will provide the avatar images
+- Avatar should appear beside the corresponding text (not above or detached)
+
+How It Works:
+1. Scene loads showing the current story segment from the LLM
+2. Player selects one of 2–3 options
+3. Frontend sends to Chutes API:
+   - Story history
+   - Last selected choice
+   - Current relationship state
+4. Chutes AI LLM responds with:
+   - The next scene (dialogue)
+   - New choices
+5. Loop continues until the story reaches an ending
+
+LLM Prompt Template:
+You are the engine for a text-based visual novel called "Rickorty: Fall Damage."
+Characters: Rick Sanchez (sarcastic, emotionally repressed) and Morty Smith (anxious, emotionally intuitive).
+Story so far: [STORY_HISTORY]
+Last choice: [PLAYER_CHOICE]
+Current relationship: [REL_STATE]
+
+Respond with:
+1. The next scene (3–6 lines of in-character dialogue)
+2. Exactly 3 player choices that naturally follow the scene
