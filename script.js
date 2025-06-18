@@ -110,6 +110,21 @@ class RickortyGame {
         element.innerHTML = htmlText; // Ensure final HTML is complete
     }
 
+    // Display player's choice
+    displayPlayerChoice(choice) {
+        const dialogueContent = document.getElementById('dialogueContent');
+        
+        const choiceElement = document.createElement('div');
+        choiceElement.className = 'player-choice';
+        choiceElement.innerHTML = `<strong>You:</strong> ${choice}`;
+        
+        dialogueContent.appendChild(choiceElement);
+        
+        // Auto-scroll to show new content
+        const dialogueContainer = document.getElementById('dialogueContainer');
+        dialogueContainer.scrollTop = dialogueContainer.scrollHeight;
+    }
+
     // Show error message
     showError(message) {
         document.getElementById('errorText').textContent = message;
@@ -159,33 +174,38 @@ class RickortyGame {
 
         return `You are the creative engine for a visual novel called "Rickorty: Fall Damage."
 
-SETTING: Rick and Morty are alone in Rick's garage after a dangerous mission that went wrong. Morty is emotionally shaken, while Rick tries to deflect with his usual sarcasm. This is a character-driven story exploring their complex relationship with potential for emotional growth.
+SETTING: Rick and Morty are in Rick's garage. This is an ongoing character-driven story exploring their complex relationship with potential for emotional growth.
 
 CHARACTERS:
 - Rick Sanchez: Brilliant but emotionally guarded scientist. Uses sarcasm and cynicism to avoid vulnerability. Despite his harsh exterior, he cares deeply about Morty but struggles to show it.
 - Morty Smith: Anxious 14-year-old who is more emotionally intelligent than he appears. Often overwhelmed but genuinely caring and honest about his feelings.
 
 STORY CONTEXT:
-Previous events: ${historyText}
-Morty's last choice/action: ${lastChoice}
+Story progression so far: ${historyText}
+Morty's most recent action: ${lastChoice}
 Current relationship dynamic: ${relationshipState}
 ${additionalContext}
 
-TASK: Write the next story scene that includes:
-1. Rich narrative descriptions (3-4 sentences) covering setting, atmosphere, character emotions, and what's happening between dialogue
-2. Clean character dialogue (3-5 exchanges between Rick and Morty with no action descriptions)
-3. Additional narrative between dialogue exchanges to show character reactions, emotions, and scene progression
+WRITING GUIDELINES:
+- Continue the existing narrative flow - DO NOT restart or re-describe the setting
+- Maintain consistent present tense throughout
+- Build naturally from the previous scene
+- Focus on character development and relationship dynamics
+- Keep the story moving forward, not resetting
 
-Then provide exactly 3 meaningful choice options for Morty that will meaningfully impact the story direction.
+TASK: Write the next story scene that naturally continues from where we left off:
+1. Rich narrative continuation (2-3 sentences) showing immediate character reactions and scene progression
+2. Clean character dialogue (3-5 exchanges between Rick and Morty)
+3. Additional narrative between dialogue showing emotional development
 
 Respond in this exact JSON format:
 {
-  "narrative": "Rich opening description of the scene, setting, atmosphere, and character states...",
+  "narrative": "Narrative continuation showing immediate reactions and scene development...",
   "scene": [
     {"character": "Rick", "dialogue": "What Rick says..."},
-    {"narrative": "Description of what happens next, how characters react, body language, emotions..."},
+    {"narrative": "Character reactions and emotional context..."},
     {"character": "Morty", "dialogue": "What Morty responds..."},
-    {"narrative": "More narrative describing the tension, environment, or character feelings..."},
+    {"narrative": "Further development and tension..."},
     {"character": "Rick", "dialogue": "Rick's response..."}
   ],
   "choices": [
@@ -195,15 +215,13 @@ Respond in this exact JSON format:
   ]
 }
 
-Make the dialogue authentic - Rick should be sharp-tongued but show hints of care, Morty should be genuine and reactive to Rick's behavior. Use rich narrative sections to show character emotions, environmental details, and psychological tension between dialogue exchanges. The narrative should paint a vivid picture of the scene and characters' internal states.
-
-IMPORTANT: Use plain text for dialogue - no asterisks, markdown, or special formatting characters. Keep dialogue natural and conversational.`;
+CRITICAL: Continue the story naturally - do not restart, reset, or re-establish the setting. Maintain present tense and story flow. Use plain text for dialogue with no special formatting.`;
     }
 
     // Call the LLM API
     async callLLM(prompt) {
         const requestBody = {
-            model: "deepseek-ai/DeepSeek-V3-0324",
+            model: "Qwen/Qwen3-235B-A22B",
             messages: [
                 {
                     role: "system",
@@ -403,6 +421,9 @@ IMPORTANT: Use plain text for dialogue - no asterisks, markdown, or special form
 
     // Handle choice selection
     async selectChoice(choice, index) {
+        // Display the selected choice in the dialogue
+        this.displayPlayerChoice(choice);
+        
         // Remove choice buttons
         document.getElementById('choicesContainer').innerHTML = '';
         

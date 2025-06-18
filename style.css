@@ -240,6 +240,17 @@ body {
     margin-top: 5px;
 }
 
+/* Player Choice */
+.player-choice {
+    background-color: #2a3a2a;
+    border-left: 3px solid #ffff00;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 5px;
+    font-style: italic;
+    color: #ffff00;
+}
+
 /* Choices Container */
 .choices-container {
     display: flex;
