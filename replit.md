@@ -103,7 +103,8 @@ AI Response → Content Parsing → UI Update → Await Next Choice
 
 Preferred communication style: Simple, everyday language.
 UI preferences: 
-- No loading indicators, prefer typewriter/streaming text effect as story content is displayed
+- No loading indicators, prefer fast typewriter/streaming text effect as story content is displayed
 - Scrolling accumulation of story content with subtle, functional scrollbar
 - Auto-scroll to new content as it appears
 - Readable story progression with complete history visible
+- Fast typewriter speeds for better user experience
