@@ -5,7 +5,7 @@ class RickortyGame {
         this.apiEndpoint = 'https://llm.chutes.ai/v1/chat/completions';
         this.gameState = {
             storyHistory: [],
-            relationshipLevel: 50, // 0-100 scale
+            relationshipLevel: 50, // 0-100 scale, starting at neutral (50) for their established relationship
             currentScene: null,
             isGameOver: false,
             turnCount: 0
@@ -162,7 +162,7 @@ class RickortyGame {
     async startNewGame() {
         this.gameState = {
             storyHistory: [],
-            relationshipLevel: 50,
+            relationshipLevel: 50, // Starting at neutral (50) for their established relationship
             currentScene: null,
             isGameOver: false,
             turnCount: 0
@@ -617,10 +617,6 @@ CRITICAL:
                 break;
         }
     }
-
-
-
-
 
     // Retry connection
     retryConnection() {
