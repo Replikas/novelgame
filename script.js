@@ -544,11 +544,9 @@ You are a masterful visual novel writer and dialogue specialist. Your job is to 
 
     // Update relationship level
     updateRelationship(choiceIndex) {
-        // More gradual relationship changes
-        // First choice: small positive change
-        // Second choice: neutral
-        // Third choice: small negative change
-        const changes = [1, 0, -1];
+        // Moderate relationship changes
+        // First choice: +5, Second: 0, Third: -3
+        const changes = [5, 0, -3];
         const change = changes[choiceIndex] || 0;
         
         this.gameState.relationshipLevel = Math.max(0, Math.min(100, this.gameState.relationshipLevel + change));
