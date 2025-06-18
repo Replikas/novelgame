@@ -310,6 +310,12 @@ CRITICAL:
                 }
             }
             
+            // Handle truncated JSON responses
+            if (cleanResponse.includes('[TRUNCATED]') || (!cleanResponse.endsWith('}') && cleanResponse.includes('"scene"'))) {
+                // Try to fix truncated JSON
+                cleanResponse = this.fixTruncatedJSON(cleanResponse);
+            }
+            
             // Look for JSON content between braces if other methods fail
             if (!cleanResponse.startsWith('{')) {
                 const jsonMatch = cleanResponse.match(/\{[\s\S]*\}/);
@@ -323,6 +329,7 @@ CRITICAL:
             try {
                 parsedResponse = JSON.parse(cleanResponse);
             } catch (e) {
+                console.log('JSON parsing failed, attempting to fix:', e.message);
                 // If JSON parsing fails, try to extract data manually
                 parsedResponse = this.parseNonJSONResponse(response);
             }
@@ -591,6 +598,49 @@ CRITICAL:
             case 'instant':
                 this.typingSpeed = { dialogue: 0, narrative: 0 };
                 break;
+        }
+    }
+
+    // Fix truncated JSON responses
+    fixTruncatedJSON(jsonStr) {
+        try {
+            // Find the last complete dialogue entry
+            const lastDialogueIndex = jsonStr.lastIndexOf('{"character"');
+            if (lastDialogueIndex === -1) {
+                return jsonStr;
+            }
+            
+            // Find where this dialogue entry should end
+            let braceCount = 0;
+            let inString = false;
+            let escaped = false;
+            let endIndex = lastDialogueIndex;
+            
+            for (let i = lastDialogueIndex; i < jsonStr.length; i++) {
+                const char = jsonStr[i];
+                
+                if (!inString) {
+                    if (char === '{') braceCount++;
+                    else if (char === '}') {
+                        braceCount--;
+                        if (braceCount === 0) {
+                            endIndex = i;
+                            break;
+                        }
+                    }
+                    else if (char === '"') inString = true;
+                } else {
+                    if (char === '"' && !escaped) inString = false;
+                    escaped = (char === '\\' && !escaped);
+                }
+            }
+            
+            // Cut off at the complete dialogue entry and add proper ending
+            const fixedJson = jsonStr.substring(0, endIndex + 1) + '],"choices":["Continue the conversation","Ask what happened","Stay silent"]}';
+            return fixedJson;
+        } catch (e) {
+            console.log('Failed to fix truncated JSON:', e.message);
+            return jsonStr;
         }
     }
 
