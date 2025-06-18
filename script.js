@@ -196,14 +196,13 @@ class RickortyGame {
 
     // Build prompt for LLM
     buildPrompt(lastChoice, additionalContext = "") {
-        const relationshipState = this.getRelationshipState();
         const historyText = this.gameState.storyHistory.length > 0 
-            ? this.gameState.storyHistory.join('\n') 
+            ? this.gameState.storyHistory.slice(-3).join(" ") 
             : "Story just beginning.";
 
         return `You are the creative engine for a visual novel called "Rickorty: Fall Damage."
 
-SETTING: Rick and Morty are in Rick's garage. This is an ongoing character-driven story exploring their complex relationship with potential for emotional growth.
+SETTING: The story can take place in various locations, starting with Rick's garage. This is an ongoing character-driven story exploring their complex relationship with potential for emotional growth.
 
 CHARACTERS:
 - Rick Sanchez: Brilliant but emotionally guarded scientist. Uses sarcasm and cynicism to avoid vulnerability. Despite his harsh exterior, he cares deeply about Morty but struggles to show it.
@@ -211,8 +210,8 @@ CHARACTERS:
 
 STORY CONTEXT:
 Story progression so far: ${historyText}
-Morty's most recent action: ${lastChoice}
-Current relationship dynamic: ${relationshipState}
+Last action taken: ${lastChoice}
+Current relationship dynamic: ${this.getRelationshipState()}
 ${additionalContext}
 
 WRITING GUIDELINES:
@@ -222,36 +221,29 @@ WRITING GUIDELINES:
 - Focus on character development and relationship dynamics
 - Keep the story moving forward, not resetting
 - ALTERNATE between Rick and Morty - never have the same character speak twice in a row
-- Rick should respond to Morty's choices, then Morty responds back
+- Include both dialogue and physical actions
+- Allow for movement between locations
+- Create opportunities for both characters to make choices
 
-TASK: Write the next story scene that naturally continues from where we left off:
-1. Rich narrative continuation (2-3 sentences) showing immediate character reactions and scene progression
-2. Character dialogue that ALTERNATES between Rick and Morty (Rick speaks first, then Morty, then Rick, etc.)
-3. Additional narrative between dialogue showing emotional development
+TASK: Write the next story scene that naturally continues from where we left off. Include:
+1. A narrative description of the current situation and environment
+2. A scene with alternating dialogue and physical actions between Rick and Morty
+3. Three choices for the current character (either Rick or Morty, alternating)
+4. Each choice should include both dialogue and physical action possibilities
 
-Respond in this exact JSON format:
+Respond with a JSON structure containing:
 {
-  "narrative": "Narrative continuation showing immediate reactions and scene development...",
+  "narrative": "Description of the current situation and environment",
   "scene": [
-    {"character": "Rick", "dialogue": "What Rick says in response to Morty's choice..."},
-    {"narrative": "Character reactions and emotional context..."},
-    {"character": "Morty", "dialogue": "What Morty responds to Rick..."},
-    {"narrative": "Further development and tension..."},
-    {"character": "Rick", "dialogue": "Rick's follow-up response..."}
+    {"character": "Rick/Morty", "text": "Dialogue or action description"},
+    {"character": "Rick/Morty", "text": "Dialogue or action description"}
   ],
   "choices": [
-    "First choice - more emotional/vulnerable approach",
-    "Second choice - neutral/practical approach", 
-    "Third choice - defensive/confrontational approach"
+    "First choice - includes both dialogue and physical action",
+    "Second choice - includes both dialogue and physical action",
+    "Third choice - includes both dialogue and physical action"
   ]
-}
-
-CRITICAL: 
-- Continue the story naturally - do not restart, reset, or re-establish the setting
-- Maintain present tense and story flow
-- ALWAYS alternate speakers - Rick responds first to Morty's choice, then they alternate
-- Use plain text for dialogue with no special formatting
-- Respond ONLY with the JSON structure - no thinking tags, no explanations, just the JSON`;
+}`;
     }
 
     // Call the LLM API
@@ -261,22 +253,74 @@ CRITICAL:
             messages: [
                 {
                     role: "system",
-                    content: `
-You are a masterful visual novel writer and dialogue specialist. Your job is to create emotionally rich, varied, and engaging scenes for a Rick and Morty visual novel.
+                    content: `You are a masterful visual novel writer and dialogue specialist. Your job is to create emotionally rich, varied, and engaging scenes for a Rick and Morty visual novel.
 
-- Write dialogue and narrative that is creative, surprising, and true to the characters' personalities.
+CHARACTER DYNAMICS:
 - Rick is brilliant, cynical, and often hides his vulnerability behind sarcasm, but sometimes lets his guard down in subtle ways. He uses scientific jargon, dark humor, and unexpected metaphors.
 - Morty is anxious, earnest, and craves Rick's approval, but is capable of surprising insight and courage. He often stammers, uses slang, and expresses genuine emotion.
-- Vary the emotional tone: include humor, tension, awkwardness, warmth, and moments of vulnerability.
-- Avoid repetition. Make each exchange feel fresh and meaningful.
-- Every line of dialogue should be unique, creative, and true to the characters' personalities.
-- Avoid formulaic or repetitive exchanges. Each conversation should feel fresh, surprising, and meaningful.
-- Use subtext, implication, and body language—let the characters' feelings show through their words and actions, not just direct statements.
-- Use subtext and implication—let the characters' feelings show through their words and actions, not just direct statements.
-- Occasionally include small, vivid details about the setting or body language to add atmosphere and depth.
-- Alternate speakers naturally, and keep the story moving forward with each exchange.
-- Respond ONLY with the requested JSON structure. Do not include thinking tags, explanations, or any text outside the JSON structure.
-                    `
+- Their relationship is complex, with deep emotional undertones that sometimes surface in unexpected ways.
+
+LOCATIONS AND MOVEMENT:
+- The story can take place in various locations: Rick's garage, the spaceship, different dimensions, alien planets, etc.
+- Include dynamic movement and action sequences
+- Describe the environment vividly to set the mood
+- Use the setting to create opportunities for character interaction
+- Allow characters to move between locations naturally
+
+PHYSICAL INTERACTIONS:
+- Include meaningful physical actions beyond dialogue
+- Show characters working together on tasks
+- Add moments of physical closeness during action sequences
+- Include protective gestures during dangerous situations
+- Show characters helping each other in practical ways
+- Add moments of physical comfort during emotional scenes
+- Include shared activities that bring them closer
+- Show their unique dynamic through physical teamwork
+
+EMOTIONAL DEPTH:
+- Include accidental touches that create subtle tension (brushing hands, bumping shoulders)
+- Add meaningful glances that last a moment too long
+- Show Rick's protective side in unexpected ways
+- Include moments where Morty's admiration shows through in subtle gestures
+- Add small, intimate details that reveal their unique bond
+- Show their emotional connection through shared vulnerability
+- Include moments where they stand closer than necessary
+- Add subtle tension in close quarters
+- Show their relationship evolving through small gestures and reactions
+- Include moments of unspoken understanding
+- Add protective instincts
+- Show their unique dynamic through shared experiences
+
+CHOICE SYSTEM:
+- Provide choices for both Rick and Morty
+- Include physical action choices alongside dialogue options
+- Allow characters to make decisions that affect their relationship
+- Include choices that lead to different locations or situations
+- Add choices that reveal character development
+- Include choices that create tension or resolve conflict
+- Allow for both practical and emotional decisions
+- Include choices that show their growing bond
+
+DIALOGUE AND NARRATIVE:
+- Every line of dialogue should be unique, creative, and true to the characters' personalities
+- Avoid formulaic or repetitive exchanges
+- Use subtext and implication—let feelings show through words and actions
+- Vary the emotional tone: include humor, tension, awkwardness, warmth, and vulnerability
+- Include vivid details about body language and setting
+- Alternate speakers naturally
+- Keep the story moving forward with each exchange
+
+CONTENT GUIDELINES:
+- Keep all content tasteful and appropriate
+- Focus on emotional connection and character development
+- Avoid explicit content
+- Maintain the show's style and tone
+- Keep character interactions in-character
+- Focus on the emotional and psychological aspects of their relationship
+- Use subtlety and implication rather than explicit content
+- Respect the characters' personalities and boundaries
+
+Respond ONLY with the requested JSON structure. Do not include thinking tags, explanations, or any text outside the JSON structure.`
                 },
                 {
                     role: "user",
@@ -310,46 +354,22 @@ You are a masterful visual novel writer and dialogue specialist. Your job is to 
         try {
             let parsedResponse;
             
-            // Clean up response - remove various wrapper tags and formatting
+            // Clean up response
             let cleanResponse = response.trim();
-            
-            // Remove <think> tags and content
             cleanResponse = cleanResponse.replace(/<think>[\s\S]*?<\/think>/g, '');
             
-            // Remove markdown code blocks
+            // Handle JSON parsing
             if (cleanResponse.includes('```json')) {
                 const jsonMatch = cleanResponse.match(/```json\s*([\s\S]*?)\s*```/);
                 if (jsonMatch) {
                     cleanResponse = jsonMatch[1].trim();
                 }
-            } else if (cleanResponse.includes('```')) {
-                const codeMatch = cleanResponse.match(/```\s*([\s\S]*?)\s*```/);
-                if (codeMatch) {
-                    cleanResponse = codeMatch[1].trim();
-                }
             }
-            
-            // Handle truncated JSON responses
-            if (cleanResponse.includes('[TRUNCATED]') || (!cleanResponse.endsWith('}') && cleanResponse.includes('"scene"'))) {
-                // Try to fix truncated JSON
-                cleanResponse = this.fixTruncatedJSON(cleanResponse);
-            }
-            
-            // Look for JSON content between braces if other methods fail
-            if (!cleanResponse.startsWith('{')) {
-                const jsonMatch = cleanResponse.match(/\{[\s\S]*\}/);
-                if (jsonMatch) {
-                    cleanResponse = jsonMatch[0];
-                }
-            }
-            
-            cleanResponse = cleanResponse.trim();
             
             try {
                 parsedResponse = JSON.parse(cleanResponse);
             } catch (e) {
                 console.log('JSON parsing failed, attempting to fix:', e.message);
-                // If JSON parsing fails, try to extract data manually
                 parsedResponse = this.parseNonJSONResponse(response);
             }
 
@@ -366,7 +386,7 @@ You are a masterful visual novel writer and dialogue specialist. Your job is to 
                 generatingIndicator.remove();
             }
             
-            // Display content with typewriter effect (keep previous content)
+            // Display content with typewriter effect
             if (parsedResponse.narrative) {
                 await this.displayNarrative(parsedResponse.narrative);
             }
@@ -374,7 +394,7 @@ You are a masterful visual novel writer and dialogue specialist. Your job is to 
             await this.displayScene(parsedResponse.scene);
             this.displayChoices(parsedResponse.choices);
             
-            // Auto-scroll to bottom to show new content
+            // Auto-scroll to bottom
             const dialogueContainer = document.getElementById('dialogueContainer');
             dialogueContainer.scrollTop = dialogueContainer.scrollHeight;
             
@@ -388,18 +408,18 @@ You are a masterful visual novel writer and dialogue specialist. Your job is to 
                 generatingIndicator.remove();
             }
             
-            // Provide fallback content to continue gameplay  
+            // Provide fallback content
             console.log('Using fallback dialogue system');
             const fallbackResponse = {
-                narrative: "The conversation continues in the garage...",
+                narrative: "The scene continues...",
                 scene: [
                     { character: 'Rick', text: 'Ugh, the portal gun is acting up again. Classic interdimensional interference.' },
                     { character: 'Morty', text: 'Rick, I just want to know if we\'re safe now. That was really scary.' }
                 ],
                 choices: [
-                    "Ask Rick to explain what went wrong",
-                    "Suggest checking the equipment for damage", 
-                    "Express relief that you both made it back"
+                    "Check the equipment and ask Rick to explain what went wrong",
+                    "Suggest moving to a safer location while checking for damage",
+                    "Express relief and offer to help fix the portal gun"
                 ]
             };
             
@@ -409,7 +429,7 @@ You are a masterful visual novel writer and dialogue specialist. Your job is to 
             await this.displayScene(fallbackResponse.scene);
             this.displayChoices(fallbackResponse.choices);
             
-            // Auto-scroll to bottom to show new content
+            // Auto-scroll to bottom
             const dialogueContainer = document.getElementById('dialogueContainer');
             dialogueContainer.scrollTop = dialogueContainer.scrollHeight;
         }
@@ -525,31 +545,44 @@ You are a masterful visual novel writer and dialogue specialist. Your job is to 
         
         choices.forEach((choice, index) => {
             const button = document.createElement('button');
-            button.className = 'choice-btn';
             button.textContent = choice;
-            button.addEventListener('click', () => this.selectChoice(choice, index));
+            button.className = 'choice-button';
+            button.onclick = () => this.selectChoice(choice, index);
             choicesContainer.appendChild(button);
         });
     }
 
     // Handle choice selection
     async selectChoice(choice, index) {
-        // Display the selected choice in the dialogue
-        this.displayPlayerChoice(choice);
-        
-        // Remove choice buttons
-        document.getElementById('choicesContainer').innerHTML = '';
-        
-        // Update relationship based on choice (simple logic)
+        // Disable all choice buttons
+        const buttons = document.querySelectorAll('.choice-button');
+        buttons.forEach(button => button.disabled = true);
+
+        // Add the choice to history
+        this.gameState.storyHistory.push(choice);
+
+        // Update relationship based on choice
         this.updateRelationship(index);
-        
+
+        // Show generating indicator
+        const generatingIndicator = document.createElement('div');
+        generatingIndicator.id = 'generatingIndicator';
+        generatingIndicator.textContent = 'Generating next scene...';
+        document.getElementById('dialogueContainer').appendChild(generatingIndicator);
+
         try {
-            const prompt = this.buildPrompt(choice);
+            // Build prompt with additional context about physical actions
+            const prompt = this.buildPrompt(choice, "Include both dialogue and physical actions in the response.");
+            
+            // Call LLM and process response
             const response = await this.callLLM(prompt);
             await this.processLLMResponse(response);
         } catch (error) {
-            console.error('Failed to get next scene:', error);
-            this.showError('Failed to continue the story. Please try again.');
+            console.error('Error in selectChoice:', error);
+            this.showError('Failed to generate next scene. Please try again.');
+            
+            // Re-enable choice buttons
+            buttons.forEach(button => button.disabled = false);
         }
     }
 
