@@ -1,0 +1,31 @@
+<svg width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+  <!-- Rick's head -->
+  <circle cx="25" cy="25" r="20" fill="#F4E4BC" stroke="#000" stroke-width="2"/>
+  
+  <!-- Rick's hair -->
+  <path d="M10 15 Q8 8 12 5 Q18 3 25 8 Q32 3 38 5 Q42 8 40 15 Q35 12 30 13 Q25 10 20 13 Q15 12 10 15 Z" fill="#C0C0C0" stroke="#000" stroke-width="1"/>
+  
+  <!-- Hair spikes -->
+  <path d="M15 8 L12 3 L18 5 Z" fill="#C0C0C0" stroke="#000" stroke-width="1"/>
+  <path d="M25 5 L23 0 L27 2 Z" fill="#C0C0C0" stroke="#000" stroke-width="1"/>
+  <path d="M35 8 L38 3 L32 5 Z" fill="#C0C0C0" stroke="#000" stroke-width="1"/>
+  
+  <!-- Eyes -->
+  <circle cx="19" cy="20" r="3" fill="white" stroke="#000" stroke-width="1"/>
+  <circle cx="31" cy="20" r="3" fill="white" stroke="#000" stroke-width="1"/>
+  <circle cx="19" cy="20" r="1.5" fill="#000"/>
+  <circle cx="31" cy="20" r="1.5" fill="#000"/>
+  
+  <!-- Eyebrows -->
+  <path d="M16 16 Q19 14 22 16" stroke="#000" stroke-width="2" fill="none"/>
+  <path d="M28 16 Q31 14 34 16" stroke="#000" stroke-width="2" fill="none"/>
+  
+  <!-- Mouth -->
+  <path d="M20 30 Q25 35 30 30" stroke="#000" stroke-width="2" fill="none"/>
+  
+  <!-- Drool -->
+  <path d="M18 32 Q16 36 14 40" stroke="#90EE90" stroke-width="2" fill="none"/>
+  
+  <!-- Lab coat collar -->
+  <path d="M10 42 L25 40 L40 42 L45 50 L5 50 Z" fill="white" stroke="#000" stroke-width="1"/>
+</svg>

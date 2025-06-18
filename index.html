@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rickorty: Fall Damage</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Game Header -->
+        <header class="game-header">
+            <h1 class="game-title">Rickorty: Fall Damage</h1>
+            <div class="relationship-tracker">
+                <div class="relationship-label">Relationship</div>
+                <div class="relationship-bar">
+                    <div class="relationship-fill" id="relationshipFill"></div>
+                </div>
+                <div class="relationship-status" id="relationshipStatus">Neutral</div>
+            </div>
+        </header>
+
+        <!-- Loading Screen -->
+        <div class="loading-screen" id="loadingScreen">
+            <div class="loading-spinner"></div>
+            <p>Generating story...</p>
+        </div>
+
+        <!-- Game Content -->
+        <main class="game-content" id="gameContent">
+            <!-- Dialogue Box -->
+            <div class="dialogue-container" id="dialogueContainer">
+                <div class="dialogue-content" id="dialogueContent">
+                    <!-- Dialogue will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!-- Choice Buttons -->
+            <div class="choices-container" id="choicesContainer">
+                <!-- Choice buttons will be dynamically inserted here -->
+            </div>
+
+            <!-- Game Controls -->
+            <div class="game-controls">
+                <button class="control-btn restart-btn" id="restartBtn">Restart Story</button>
+                <button class="control-btn history-btn" id="historyBtn">Show History</button>
+            </div>
+        </main>
+
+        <!-- History Modal -->
+        <div class="modal" id="historyModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Story History</h2>
+                    <span class="close-btn" id="closeHistoryBtn">&times;</span>
+                </div>
+                <div class="modal-body" id="historyContent">
+                    <!-- History content will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-message" id="errorMessage">
+            <div class="error-content">
+                <h3>Connection Error</h3>
+                <p id="errorText">Unable to connect to the story engine. Please check your connection and try again.</p>
+                <button class="retry-btn" id="retryBtn">Retry</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
