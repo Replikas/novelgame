@@ -1,8 +1,8 @@
 // Game State Management
 class RickortyGame {
     constructor() {
-        this.apiKey = this.getApiKey();
-        this.apiEndpoint = 'https://api.chutes.ai/v1/chat/completions';
+        this.apiKey = null;
+        this.apiEndpoint = 'https://llm.chutes.ai/v1/chat/completions';
         this.gameState = {
             storyHistory: [],
             relationshipLevel: 50, // 0-100 scale
@@ -15,16 +15,31 @@ class RickortyGame {
         this.bindEvents();
     }
 
-    // Get API key from environment with fallback
-    getApiKey() {
-        // In a browser environment, we'll need to handle this differently
-        // For now, we'll use a placeholder that should be replaced with actual key
-        return localStorage.getItem('chutes_api_key') || 'demo_key_please_replace';
+    // Load configuration from server
+    async loadConfig() {
+        try {
+            const response = await fetch('/api/config');
+            const config = await response.json();
+            this.apiKey = config.apiKey;
+            this.apiEndpoint = config.apiEndpoint;
+            return true;
+        } catch (error) {
+            console.error('Failed to load config:', error);
+            return false;
+        }
     }
 
     // Initialize the game
-    initializeGame() {
+    async initializeGame() {
         this.showLoading();
+        
+        // Load configuration first
+        const configLoaded = await this.loadConfig();
+        if (!configLoaded || !this.apiKey) {
+            this.showError('Failed to load game configuration. Please check your connection and try again.');
+            return;
+        }
+        
         this.startNewGame();
     }
 
@@ -132,7 +147,7 @@ Keep dialogue authentic to the characters. Rick should be sarcastic and deflecti
     // Call the LLM API
     async callLLM(prompt) {
         const requestBody = {
-            model: "qwen-2.5-72b-instruct",
+            model: "deepseek-ai/DeepSeek-V3-0324",
             messages: [
                 {
                     role: "system",
@@ -373,21 +388,12 @@ Keep dialogue authentic to the characters. Rick should be sarcastic and deflecti
     // Retry connection
     retryConnection() {
         this.hideError();
-        this.startNewGame();
+        this.initializeGame();
     }
 }
 
 // Initialize game when page loads
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if API key is available
-    const apiKey = localStorage.getItem('chutes_api_key');
-    if (!apiKey || apiKey === 'demo_key_please_replace') {
-        const userApiKey = prompt('Please enter your Chutes API key:');
-        if (userApiKey) {
-            localStorage.setItem('chutes_api_key', userApiKey);
-        }
-    }
-    
     // Start the game
     window.rickortyGame = new RickortyGame();
 });
