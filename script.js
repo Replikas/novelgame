@@ -59,7 +59,15 @@ class RickortyGame {
         if (speedSelect) {
             speedSelect.addEventListener('change', (e) => this.updateTypingSpeed(e.target.value));
         }
-        
+        // Save/Load Progress
+        const saveBtn = document.getElementById('saveBtn');
+        const loadBtn = document.getElementById('loadBtn');
+        if (saveBtn) {
+            saveBtn.addEventListener('click', () => this.saveProgress());
+        }
+        if (loadBtn) {
+            loadBtn.addEventListener('click', () => this.loadProgress());
+        }
         // Close modal when clicking outside
         document.getElementById('historyModal').addEventListener('click', (e) => {
             if (e.target === document.getElementById('historyModal')) {
@@ -642,6 +650,45 @@ You are a masterful visual novel writer and dialogue specialist. Your job is to 
     retryConnection() {
         this.hideError();
         this.initializeGame();
+    }
+
+    // Save progress to localStorage
+    saveProgress() {
+        try {
+            localStorage.setItem('rickortyGameSave', JSON.stringify(this.gameState));
+            alert('Progress saved!');
+        } catch (e) {
+            alert('Failed to save progress.');
+        }
+    }
+
+    // Load progress from localStorage
+    loadProgress() {
+        try {
+            const data = localStorage.getItem('rickortyGameSave');
+            if (data) {
+                this.gameState = JSON.parse(data);
+                this.updateRelationshipDisplay();
+                this.showLoadedProgress();
+                alert('Progress loaded!');
+            } else {
+                alert('No saved progress found.');
+            }
+        } catch (e) {
+            alert('Failed to load progress.');
+        }
+    }
+
+    // Optionally show loaded progress (refresh UI)
+    showLoadedProgress() {
+        // Redraw dialogue, choices, etc. as needed
+        // For now, just restart the current scene
+        document.getElementById('dialogueContent').innerHTML = '';
+        document.getElementById('choicesContainer').innerHTML = '';
+        if (this.gameState.currentScene) {
+            this.displayScene(this.gameState.currentScene.scene || []);
+            this.displayChoices(this.gameState.currentScene.choices || []);
+        }
     }
 }
 
