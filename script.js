@@ -192,21 +192,23 @@ WRITING GUIDELINES:
 - Build naturally from the previous scene
 - Focus on character development and relationship dynamics
 - Keep the story moving forward, not resetting
+- ALTERNATE between Rick and Morty - never have the same character speak twice in a row
+- Rick should respond to Morty's choices, then Morty responds back
 
 TASK: Write the next story scene that naturally continues from where we left off:
 1. Rich narrative continuation (2-3 sentences) showing immediate character reactions and scene progression
-2. Clean character dialogue (3-5 exchanges between Rick and Morty)
+2. Character dialogue that ALTERNATES between Rick and Morty (Rick speaks first, then Morty, then Rick, etc.)
 3. Additional narrative between dialogue showing emotional development
 
 Respond in this exact JSON format:
 {
   "narrative": "Narrative continuation showing immediate reactions and scene development...",
   "scene": [
-    {"character": "Rick", "dialogue": "What Rick says..."},
+    {"character": "Rick", "dialogue": "What Rick says in response to Morty's choice..."},
     {"narrative": "Character reactions and emotional context..."},
-    {"character": "Morty", "dialogue": "What Morty responds..."},
+    {"character": "Morty", "dialogue": "What Morty responds to Rick..."},
     {"narrative": "Further development and tension..."},
-    {"character": "Rick", "dialogue": "Rick's response..."}
+    {"character": "Rick", "dialogue": "Rick's follow-up response..."}
   ],
   "choices": [
     "First choice - more emotional/vulnerable approach",
@@ -215,7 +217,11 @@ Respond in this exact JSON format:
   ]
 }
 
-CRITICAL: Continue the story naturally - do not restart, reset, or re-establish the setting. Maintain present tense and story flow. Use plain text for dialogue with no special formatting.`;
+CRITICAL: 
+- Continue the story naturally - do not restart, reset, or re-establish the setting
+- Maintain present tense and story flow
+- ALWAYS alternate speakers - Rick responds first to Morty's choice, then they alternate
+- Use plain text for dialogue with no special formatting`;
     }
 
     // Call the LLM API
@@ -302,32 +308,28 @@ CRITICAL: Continue the story naturally - do not restart, reset, or re-establish 
     // Parse non-JSON response (fallback)
     parseNonJSONResponse(response) {
         // Simple parser for cases where LLM doesn't return proper JSON
-        const lines = response.split('\n').filter(line => line.trim());
-        const scene = [];
-        const choices = [];
+        console.warn('Parsing non-JSON response:', response);
         
-        let currentSection = null;
+        // Create a basic alternating dialogue structure
+        const scene = [
+            { character: "Rick", dialogue: "Look, Morty, the story generator's being weird again." },
+            { narrative: "Rick waves his hand dismissively while Morty looks confused." },
+            { character: "Morty", dialogue: "Aw geez, Rick, can't you just fix it?" },
+            { narrative: "The tension in the garage grows as technical difficulties interrupt their moment." },
+            { character: "Rick", dialogue: "I'm working on it, okay? These things happen." }
+        ];
         
-        for (const line of lines) {
-            if (line.includes('Rick:') || line.includes('Morty:')) {
-                const [character, dialogue] = line.split(':').map(s => s.trim());
-                scene.push({ character, dialogue });
-            } else if (line.match(/^\d+\./)) {
-                choices.push(line.replace(/^\d+\.\s*/, ''));
-            }
-        }
+        const choices = [
+            "Try to help Rick fix the problem",
+            "Wait patiently for Rick to handle it", 
+            "Suggest taking a break from the adventure"
+        ];
         
-        // Fallback if parsing fails
-        if (scene.length === 0) {
-            scene.push({ character: "Rick", dialogue: "Uh, something went wrong with the story generator, Morty." });
-            scene.push({ character: "Morty", dialogue: "Oh no, Rick! What do we do now?" });
-        }
-        
-        if (choices.length === 0) {
-            choices.push("Try to fix the problem", "Ask Rick for help", "Panic slightly");
-        }
-        
-        return { scene, choices };
+        return { 
+            narrative: "The story engine encounters some technical difficulties, but Rick and Morty continue their conversation.",
+            scene, 
+            choices 
+        };
     }
 
     // Display narrative text with typewriter effect
@@ -358,6 +360,7 @@ CRITICAL: Continue the story naturally - do not restart, reset, or re-establish 
                 avatar.src = `assets/${item.character.toLowerCase()}-avatar.jpg`;
                 avatar.alt = `${item.character} Avatar`;
                 avatar.onerror = () => {
+                    console.error(`Failed to load avatar: ${avatar.src}`);
                     avatar.style.display = 'none';
                 };
                 
