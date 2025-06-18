@@ -96,7 +96,7 @@ class RickortyGame {
         this.updateRelationshipDisplay();
         
         // Initial story prompt
-        const initialPrompt = this.buildPrompt("START", "The story begins. Rick and Morty are alone in the garage after a failed mission. Morty is shaken; Rick deflects with sarcasm.");
+        const initialPrompt = this.buildPrompt("GAME_START", "The story begins. Rick and Morty have just returned to the garage after a dangerous mission that went wrong. Morty is visibly shaken and emotionally vulnerable, while Rick is trying to process what happened in his usual deflective way.");
         
         try {
             const response = await this.callLLM(initialPrompt);
@@ -115,33 +115,42 @@ class RickortyGame {
             ? this.gameState.storyHistory.join('\n') 
             : "Story just beginning.";
 
-        return `You are the engine for a text-based visual novel called "Rickorty: Fall Damage."
-Characters: Rick Sanchez (sarcastic, emotionally repressed, highly intelligent) and Morty Smith (anxious, emotionally intuitive, reactive).
-Setting: Rick and Morty are alone in the garage after a failed mission. This is a slow-burn romance with emotional tension.
+        return `You are the creative engine for a visual novel called "Rickorty: Fall Damage."
 
-Story so far: ${historyText}
-Last choice: ${lastChoice}
-Current relationship: ${relationshipState}
-Additional context: ${additionalContext}
+SETTING: Rick and Morty are alone in Rick's garage after a dangerous mission that went wrong. Morty is emotionally shaken, while Rick tries to deflect with his usual sarcasm. This is a character-driven story exploring their complex relationship with potential for emotional growth.
 
-Respond with:
-1. The next scene (3-6 lines of in-character dialogue between Rick and Morty)
-2. Exactly 3 player choices that naturally follow the scene
+CHARACTERS:
+- Rick Sanchez: Brilliant but emotionally guarded scientist. Uses sarcasm and cynicism to avoid vulnerability. Despite his harsh exterior, he cares deeply about Morty but struggles to show it.
+- Morty Smith: Anxious 14-year-old who is more emotionally intelligent than he appears. Often overwhelmed but genuinely caring and honest about his feelings.
 
-Format your response as JSON:
+STORY CONTEXT:
+Previous events: ${historyText}
+Morty's last choice/action: ${lastChoice}
+Current relationship dynamic: ${relationshipState}
+${additionalContext}
+
+TASK: Write the next story scene that includes:
+1. A narrative description of the setting/atmosphere (2-3 sentences)
+2. Character dialogue and actions (3-6 exchanges between Rick and Morty)
+3. Internal thoughts or emotional context where relevant
+
+Then provide exactly 3 meaningful choice options for Morty that will meaningfully impact the story direction.
+
+Respond in this exact JSON format:
 {
+  "narrative": "Brief description of the scene, setting, and atmosphere...",
   "scene": [
-    {"character": "Rick", "dialogue": "..."},
-    {"character": "Morty", "dialogue": "..."}
+    {"character": "Rick", "dialogue": "What Rick says...", "action": "Optional: what Rick does"},
+    {"character": "Morty", "dialogue": "What Morty responds...", "action": "Optional: what Morty does"}
   ],
   "choices": [
-    "Choice 1 text",
-    "Choice 2 text", 
-    "Choice 3 text"
+    "First choice - more emotional/vulnerable approach",
+    "Second choice - neutral/practical approach", 
+    "Third choice - defensive/confrontational approach"
   ]
 }
 
-Keep dialogue authentic to the characters. Rick should be sarcastic and deflective. Morty should be anxious but emotionally honest.`;
+Make the dialogue authentic - Rick should be sharp-tongued but show hints of care, Morty should be genuine and reactive to Rick's behavior. Include subtext and emotional depth.`;
     }
 
     // Call the LLM API
@@ -158,8 +167,8 @@ Keep dialogue authentic to the characters. Rick should be sarcastic and deflecti
                     content: prompt
                 }
             ],
-            max_tokens: 1000,
-            temperature: 0.8
+            max_tokens: 800,
+            temperature: 0.7
         };
 
         const response = await fetch(this.apiEndpoint, {
@@ -182,10 +191,18 @@ Keep dialogue authentic to the characters. Rick should be sarcastic and deflecti
     // Process LLM response
     processLLMResponse(response) {
         try {
-            // Try to parse as JSON first
             let parsedResponse;
+            
+            // Clean up response - remove markdown code blocks if present
+            let cleanResponse = response.trim();
+            if (cleanResponse.startsWith('```json')) {
+                cleanResponse = cleanResponse.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+            } else if (cleanResponse.startsWith('```')) {
+                cleanResponse = cleanResponse.replace(/^```\s*/, '').replace(/\s*```$/, '');
+            }
+            
             try {
-                parsedResponse = JSON.parse(response);
+                parsedResponse = JSON.parse(cleanResponse);
             } catch (e) {
                 // If JSON parsing fails, try to extract data manually
                 parsedResponse = this.parseNonJSONResponse(response);
@@ -198,11 +215,21 @@ Keep dialogue authentic to the characters. Rick should be sarcastic and deflecti
             this.gameState.currentScene = parsedResponse;
             this.gameState.turnCount++;
             
+            // Clear previous content
+            const dialogueContent = document.getElementById('dialogueContent');
+            dialogueContent.innerHTML = '';
+            
+            // Display narrative if present
+            if (parsedResponse.narrative) {
+                this.displayNarrative(parsedResponse.narrative);
+            }
+            
             this.displayScene(parsedResponse.scene);
             this.displayChoices(parsedResponse.choices);
             
         } catch (error) {
             console.error('Failed to process LLM response:', error);
+            console.error('Raw response:', response);
             this.showError('Failed to process the story response. Please try again.');
         }
     }
@@ -238,10 +265,20 @@ Keep dialogue authentic to the characters. Rick should be sarcastic and deflecti
         return { scene, choices };
     }
 
+    // Display narrative text
+    displayNarrative(narrative) {
+        const dialogueContent = document.getElementById('dialogueContent');
+        
+        const narrativeElement = document.createElement('div');
+        narrativeElement.className = 'narrative-text';
+        narrativeElement.innerHTML = `<em>${narrative}</em>`;
+        
+        dialogueContent.appendChild(narrativeElement);
+    }
+
     // Display scene dialogue
     displayScene(scene) {
         const dialogueContent = document.getElementById('dialogueContent');
-        dialogueContent.innerHTML = '';
         
         scene.forEach(line => {
             const dialogueLine = document.createElement('div');
@@ -265,6 +302,14 @@ Keep dialogue authentic to the characters. Rick should be sarcastic and deflecti
             
             const dialogueText = document.createElement('div');
             dialogueText.textContent = line.dialogue;
+            
+            // Add action text if present
+            if (line.action) {
+                const actionText = document.createElement('div');
+                actionText.className = 'action-text';
+                actionText.innerHTML = `<em>${line.action}</em>`;
+                textContainer.appendChild(actionText);
+            }
             
             textContainer.appendChild(characterName);
             textContainer.appendChild(dialogueText);
@@ -360,6 +405,8 @@ Keep dialogue authentic to the characters. Rick should be sarcastic and deflecti
     // Restart game
     restartGame() {
         if (confirm('Are you sure you want to restart the story? All progress will be lost.')) {
+            // Clear dialogue content
+            document.getElementById('dialogueContent').innerHTML = '';
             this.startNewGame();
         }
     }

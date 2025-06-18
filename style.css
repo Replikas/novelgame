@@ -162,6 +162,24 @@ body {
     color: #ffff00;
 }
 
+/* Narrative and Action Text */
+.narrative-text {
+    background-color: #1a1a1a;
+    border-left: 3px solid #00ff00;
+    padding: 15px;
+    margin-bottom: 15px;
+    font-style: italic;
+    color: #cccccc;
+    border-radius: 5px;
+}
+
+.action-text {
+    font-style: italic;
+    color: #999999;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
 /* Choices Container */
 .choices-container {
     display: flex;
