@@ -312,6 +312,9 @@ Respond with a JSON structure containing:
 
     // Call the LLM API
     async callLLM(prompt) {
+        if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
+            throw new Error("Morty, the story prompt is empty! Something went wrong. Try restarting the game or contact support.");
+        }
         // 1. Try Chutes
         try {
             const chutesBody = {
