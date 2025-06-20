@@ -312,6 +312,7 @@ Respond with a JSON structure containing:
 
     // Call the LLM API
     async callLLM(prompt) {
+        console.log('Prompt sent to LLM:', prompt);
         if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
             throw new Error("Morty, the story prompt is empty! Something went wrong. Try restarting the game or contact support.");
         }
@@ -636,17 +637,23 @@ Respond with a JSON structure containing:
         generatingIndicator.innerHTML = 'Generating next scene<span class="dots">...</span>';
         document.getElementById('dialogueContainer').appendChild(generatingIndicator);
 
+        // Check for empty choice
+        if (!choice || typeof choice !== 'string' || choice.trim().length === 0) {
+            this.showError('Morty, you picked an empty choice! Please try again or restart the game.');
+            // Re-enable choice buttons
+            buttons.forEach(button => button.disabled = false);
+            return;
+        }
+
         try {
             // Build prompt with additional context about physical actions
             const prompt = this.buildPrompt(choice, "Include both dialogue and physical actions in the response.");
-            
             // Call LLM and process response
             const response = await this.callLLM(prompt);
             await this.processLLMResponse(response);
         } catch (error) {
             console.error('Error in selectChoice:', error);
             this.showError('Failed to generate next scene. Please try again.');
-            
             // Re-enable choice buttons
             buttons.forEach(button => button.disabled = false);
         }
