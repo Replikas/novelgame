@@ -226,8 +226,8 @@ class RickortyGame {
                     { role: 'system', content: '"/no_think"' },
                     { role: 'user', content: prompt }
                 ],
-                max_tokens: 800,
-                temperature: 0.9,
+                max_tokens: 1600,
+                temperature: 0.7,
                 reasoning: false,
                 enable_thinking: false
             };
@@ -284,8 +284,8 @@ class RickortyGame {
                 messages: [
                     { role: 'user', content: prompt }
                 ],
-                max_tokens: 800,
-                temperature: 0.9
+                max_tokens: 1600,
+                temperature: 0.7
             };
             const groqResponse = await fetch(this.groqEndpoint, {
                 method: 'POST',
