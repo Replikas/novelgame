@@ -349,8 +349,7 @@ Respond with a JSON structure containing:
                     { role: 'user', content: prompt }
                 ],
                 max_tokens: 800,
-                temperature: 0.9,
-                reasoning: false
+                temperature: 0.9
             };
             const openRouterResponse = await fetch(this.openRouterEndpoint, {
                 method: 'POST',
