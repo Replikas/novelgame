@@ -5,7 +5,7 @@ class RickortyGame {
         this.apiEndpoint = null;
         this.openRouterApiKey = null;
         this.openRouterEndpoint = null;
-        this.openRouterModel = 'deepseek/deepseek-chat-v3-0324:free';
+        this.openRouterModel = 'google/gemini-2.0-flash-exp:free';
         this.groqApiKey = null;
         this.groqEndpoint = null;
         this.groqModel = 'llama-3.3-70b-versatile'; // Set your Groq model here
