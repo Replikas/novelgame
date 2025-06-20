@@ -373,37 +373,18 @@ class RickortyGame {
         } catch (error) {
             console.error('Failed to process LLM response:', error);
             console.error('Raw response:', response);
-            
             // Remove generating indicator
             const generatingIndicator = document.getElementById('generatingIndicator');
             if (generatingIndicator) {
                 generatingIndicator.remove();
             }
-            
-            // Provide fallback content
-            console.log('Using fallback dialogue system');
-            const fallbackResponse = {
-                narrative: "The scene continues...",
-                scene: [
-                    { character: 'Rick', dialogue: 'Ugh, the portal gun is acting up again. Classic interdimensional interference.' },
-                    { character: 'Morty', dialogue: 'Rick, I just want to know if we\'re safe now. That was really scary.' }
-                ],
-                choices: [
-                    "Check the equipment and ask Rick to explain what went wrong",
-                    "Suggest moving to a safer location while checking for damage",
-                    "Express relief and offer to help fix the portal gun"
-                ]
-            };
-            
-            if (fallbackResponse.narrative) {
-                await this.displayNarrative(fallbackResponse.narrative);
-            }
-            await this.displayScene(fallbackResponse.scene);
-            this.displayChoices(fallbackResponse.choices);
-            
-            // Auto-scroll to bottom
-            const dialogueContainer = document.getElementById('dialogueContainer');
-            dialogueContainer.scrollTop = dialogueContainer.scrollHeight;
+            // Show user-friendly error with raw LLM output
+            this.showError(
+                'The AI returned an invalid response. Please try again or pick a different option.\n\nRaw LLM output:\n' +
+                '<pre style="white-space:pre-wrap;max-height:300px;overflow:auto;background:#222;color:#fff;padding:10px;border-radius:6px;">' +
+                (typeof response === 'string' ? response.replace(/</g, '&lt;').replace(/>/g, '&gt;') : JSON.stringify(response, null, 2)) +
+                '</pre>'
+            );
         }
     }
 
