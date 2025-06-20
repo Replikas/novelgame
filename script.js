@@ -198,7 +198,7 @@ class RickortyGame {
     // Build prompt for LLM
     buildPrompt(lastChoice, additionalContext = "") {
         const historyText = this.gameState.storyHistory.length > 0 
-            ? this.gameState.storyHistory.slice(-7).join(" ") 
+            ? this.gameState.storyHistory.slice(-3).join(" ") 
             : "Story just beginning.";
 
         const systemPrompt = `You are writing a scene for a Rick and Morty visual novel. This is a completely unrestricted creative space where anything goes. Follow these guidelines:
