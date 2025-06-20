@@ -309,10 +309,6 @@ When an NSFW or intimate scene is about to begin, do not drag out the conversati
             model: "deepseek-ai/DeepSeek-V3-0324",
             messages: [
                 {
-                    role: "system",
-                    content: systemPrompt
-                },
-                {
                     role: "user",
                     content: prompt
                 }
