@@ -308,6 +308,7 @@ Respond with a JSON structure containing:
 - When an NSFW or intimate scene is about to begin, do not drag out the conversation or delay excessively. Let passion and action escalate naturally and promptly, with vivid and direct transitions into the scene.
 - Rick and Morty can show a range of emotions and can be persuaded to be softer or more vulnerable with each other, depending on the situation and choices. Their relationship is not always tense or combative at the start.
 `;
+        return systemPrompt;
     }
 
     // Call the LLM API
