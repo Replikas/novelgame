@@ -245,6 +245,7 @@ Rick Sanchez (C-137):
   * Can be as dark and twisted as needed
   * May use his inventions for any purpose
   * Can be completely unrestrained
+- Clothing: Always wears a lab coat, shirt underneath, black shoes, and brown slacks.
 
 Morty Smith:
 - Age: 14 (emotionally aging fast from trauma)
@@ -277,6 +278,7 @@ Morty Smith:
   * Can be completely unrestrained
   * Assertive and growing, but does not have deep scientific knowledge—he is not a science expert.
   * Morty does not burp as a character trait or speech pattern (unlike Rick).
+- Clothing: Always wears a yellow t-shirt, blue jeans, and grey shoes.
 
 3. Emotional Depth:
 - Focus on the emotional journey and character development
@@ -487,6 +489,8 @@ Respond with a JSON structure containing:
 - When presenting choices, have the character voice or express each choice in their own words, as dialogue or internal thought, not just as a narrator or generic text.
 
 Rick and Morty can show a range of emotions and can be persuaded to be softer or more vulnerable with each other, depending on the situation and choices. Their relationship is not always tense or combative at the start.
+
+When an NSFW or intimate scene is about to begin, do not drag out the conversation or delay excessively. Let passion and action escalate naturally and promptly, with vivid and direct transitions into the scene.
 `;
     }
 
