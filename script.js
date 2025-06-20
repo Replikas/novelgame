@@ -276,6 +276,7 @@ Morty Smith:
   * May explore any desire or fantasy
   * Can be completely unrestrained
   * Assertive and growing, but does not have deep scientific knowledge—he is not a science expert.
+  * Morty does not burp as a character trait or speech pattern (unlike Rick).
 
 3. Emotional Depth:
 - Focus on the emotional journey and character development
