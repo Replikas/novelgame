@@ -306,7 +306,7 @@ When an NSFW or intimate scene is about to begin, do not drag out the conversati
     // Call the LLM API
     async callLLM(prompt) {
         const requestBody = {
-            model: "deepseek-ai/DeepSeek-V3-0324",
+            model: "Qwen/Qwen3-32B",
             messages: [
                 {
                     role: "user",
