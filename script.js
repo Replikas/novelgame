@@ -320,7 +320,7 @@ Respond with a JSON structure containing:
         // 1. Try Chutes
         try {
             const chutesBody = {
-                model: this.model || 'Qwen/Qwen3-32B',
+                model: 'deepseek-ai/DeepSeek-V3-0324',
                 messages: [
                     { role: 'user', content: prompt }
                 ],
