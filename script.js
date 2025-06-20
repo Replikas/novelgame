@@ -812,11 +812,21 @@ Respond with a JSON structure containing:
     }
 }
 
-// Initialize game when page loads
-document.addEventListener('DOMContentLoaded', () => {
-    // Start the game
-    window.rickortyGame = new RickortyGame();
-});
+// Fetch config from /api/config and initialize game
+async function startGameWithConfig() {
+    try {
+        const res = await fetch('/api/config');
+        if (!res.ok) throw new Error('Failed to load config from server');
+        window.gameConfig = await res.json();
+        window.rickortyGame = new RickortyGame();
+    } catch (e) {
+        document.getElementById('loadingScreen').classList.add('hidden');
+        document.getElementById('errorText').textContent = 'Failed to load game configuration. Please refresh the page.';
+        document.getElementById('errorMessage').classList.remove('hidden');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', startGameWithConfig);
 
 // Handle keyboard shortcuts
 document.addEventListener('keydown', (e) => {
