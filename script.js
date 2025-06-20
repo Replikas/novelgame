@@ -179,10 +179,11 @@ class RickortyGame {
         this.updateRelationshipDisplay();
         
         // Clear content for new game
-        document.getElementById('dialogueContent').innerHTML = '';
+        document.getElementById('dialogueContent').innerHTML = '<div class="generating-indicator">Generating story<span class="dots">...</span></div>';
         document.getElementById('choicesContainer').innerHTML = '';
         
         // Initial story prompt
+        const recap = this.summarizeHistory();
         const initialPrompt = this.buildPrompt("GAME_START", "The story begins. Rick and Morty have just returned to the garage after a dangerous mission that went wrong. Morty is visibly shaken and emotionally vulnerable, while Rick is trying to process what happened in his usual deflective way.");
         
         try {
@@ -914,6 +915,26 @@ Respond with a JSON structure containing:
                 this.displayChoices(this.gameState.currentScene.choices);
             }
         }
+    }
+
+    // Add this method to the RickortyGame class:
+    summarizeHistory() {
+        if (!this.gameState.storyHistory || this.gameState.storyHistory.length === 0) {
+            return 'The story is just beginning.';
+        }
+        // Use up to the last 7 entries for the summary
+        const recent = this.gameState.storyHistory.slice(-7);
+        // Simple summary: join the entries, truncate if too long
+        let summary = recent.join(' ');
+        if (summary.length > 400) {
+            summary = summary.slice(-400);
+            // Try to start at a sentence boundary
+            const firstPeriod = summary.indexOf('. ');
+            if (firstPeriod > 0) summary = summary.slice(firstPeriod + 1);
+        }
+        // Add relationship state
+        summary += ` Current relationship: ${this.getRelationshipState()}.`;
+        return summary;
     }
 }
 
