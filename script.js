@@ -334,9 +334,12 @@ Respond with a JSON structure containing:
             if (chutesResponse.ok) {
                 const data = await chutesResponse.json();
                 return data.choices[0].message.content;
+            } else {
+                const errorText = await chutesResponse.text();
+                console.error('Chutes API error:', chutesResponse.status, errorText);
             }
         } catch (e) {
-            // Continue to next provider
+            console.error('Chutes API fetch error:', e);
         }
         // 2. Try OpenRouter
         try {
@@ -360,9 +363,12 @@ Respond with a JSON structure containing:
             if (openRouterResponse.ok) {
                 const data = await openRouterResponse.json();
                 return data.choices[0].message.content;
+            } else {
+                const errorText = await openRouterResponse.text();
+                console.error('OpenRouter API error:', openRouterResponse.status, errorText);
             }
         } catch (e) {
-            // Continue to next provider
+            console.error('OpenRouter API fetch error:', e);
         }
         // 3. Try Groq
         try {
@@ -385,9 +391,12 @@ Respond with a JSON structure containing:
             if (groqResponse.ok) {
                 const data = await groqResponse.json();
                 return data.choices[0].message.content;
+            } else {
+                const errorText = await groqResponse.text();
+                console.error('Groq API error:', groqResponse.status, errorText);
             }
         } catch (e) {
-            // All providers failed
+            console.error('Groq API fetch error:', e);
         }
         // If all fail, show error
         throw new Error("Wubba lubba dub dub! The story generator is unavailable right now. Try again in a few minutes, Morty!");
