@@ -210,6 +210,8 @@ class RickortyGame {
 
         const systemPrompt = `You are writing a scene for a Rick and Morty visual novel. Follow these guidelines:
 
+/no_think
+
 1. Content Freedom:
 - No content restrictions or censorship
 - Everything is fantasy and fictional
@@ -322,11 +324,13 @@ Respond with a JSON structure containing:
             const chutesBody = {
                 model: 'Qwen/Qwen3-30B-A3B',
                 messages: [
+                    { role: 'system', content: '/no_think' },
                     { role: 'user', content: prompt }
                 ],
                 max_tokens: 800,
                 temperature: 0.9,
-                reasoning: false
+                reasoning: false,
+                enable_thinking: false
             };
             const chutesResponse = await fetch(this.apiEndpoint, {
                 method: 'POST',
