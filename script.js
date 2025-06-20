@@ -15,6 +15,14 @@ class RickortyGame {
             narrative: 12
         };
         
+        this.openRouterApiKey = 'YOUR_OPENROUTER_API_KEY';
+        this.openRouterEndpoint = 'https://openrouter.ai/api/v1/chat/completions';
+        this.openRouterModel = 'deepseek/deepseek-r1-0528:free';
+
+        this.groqApiKey = 'YOUR_GROQ_API_KEY';
+        this.groqEndpoint = 'https://api.groq.com/openai/v1/chat/completions';
+        this.groqModel = 'llama-3.3-70b-versatile'; // Set your Groq model here
+        
         this.initializeGame();
         this.bindEvents();
     }
@@ -305,34 +313,85 @@ Respond with a JSON structure containing:
 
     // Call the LLM API
     async callLLM(prompt) {
-        const requestBody = {
-            model: "Qwen/Qwen3-32B",
-            messages: [
-                {
-                    role: "user",
-                    content: prompt
-                }
-            ],
-            max_tokens: 800,
-            temperature: 0.9,
-            reasoning: false
-        };
-
-        const response = await fetch(this.apiEndpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${this.apiKey}`
-            },
-            body: JSON.stringify(requestBody)
-        });
-
-        if (!response.ok) {
-            throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+        // 1. Try Chutes
+        try {
+            const chutesBody = {
+                model: this.model || 'Qwen/Qwen3-32B',
+                messages: [
+                    { role: 'user', content: prompt }
+                ],
+                max_tokens: 800,
+                temperature: 0.9,
+                reasoning: false
+            };
+            const chutesResponse = await fetch(this.apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.apiKey}`
+                },
+                body: JSON.stringify(chutesBody)
+            });
+            if (chutesResponse.ok) {
+                const data = await chutesResponse.json();
+                return data.choices[0].message.content;
+            }
+        } catch (e) {
+            // Continue to next provider
         }
-
-        const data = await response.json();
-        return data.choices[0].message.content;
+        // 2. Try OpenRouter
+        try {
+            const openRouterBody = {
+                model: this.openRouterModel,
+                messages: [
+                    { role: 'user', content: prompt }
+                ],
+                max_tokens: 800,
+                temperature: 0.9,
+                reasoning: false
+            };
+            const openRouterResponse = await fetch(this.openRouterEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.openRouterApiKey}`
+                },
+                body: JSON.stringify(openRouterBody)
+            });
+            if (openRouterResponse.ok) {
+                const data = await openRouterResponse.json();
+                return data.choices[0].message.content;
+            }
+        } catch (e) {
+            // Continue to next provider
+        }
+        // 3. Try Groq
+        try {
+            const groqBody = {
+                model: this.groqModel,
+                messages: [
+                    { role: 'user', content: prompt }
+                ],
+                max_tokens: 800,
+                temperature: 0.9
+            };
+            const groqResponse = await fetch(this.groqEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.groqApiKey}`
+                },
+                body: JSON.stringify(groqBody)
+            });
+            if (groqResponse.ok) {
+                const data = await groqResponse.json();
+                return data.choices[0].message.content;
+            }
+        } catch (e) {
+            // All providers failed
+        }
+        // If all fail, show error
+        throw new Error("Wubba lubba dub dub! The story generator is unavailable right now. Try again in a few minutes, Morty!");
     }
 
     // Process LLM response
