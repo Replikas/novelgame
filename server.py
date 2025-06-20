@@ -28,8 +28,12 @@ class GameHandler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
             
             config = {
-                'apiKey': os.environ.get('CHUTES_API_KEY', ''),
-                'apiEndpoint': 'https://llm.chutes.ai/v1/chat/completions'
+                'chutesApiKey': os.environ.get('CHUTES_API_KEY', ''),
+                'chutesApiEndpoint': 'https://llm.chutes.ai/v1/chat/completions',
+                'openRouterApiKey': os.environ.get('OPENROUTER_API_KEY', ''),
+                'openRouterApiEndpoint': 'https://openrouter.ai/api/v1/chat/completions',
+                'groqApiKey': os.environ.get('GROQ_API_KEY', ''),
+                'groqApiEndpoint': 'https://api.groq.com/openai/v1/chat/completions'
             }
             
             self.wfile.write(json.dumps(config).encode())

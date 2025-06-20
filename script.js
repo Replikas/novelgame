@@ -2,7 +2,13 @@
 class RickortyGame {
     constructor() {
         this.apiKey = null;
-        this.apiEndpoint = 'https://llm.chutes.ai/v1/chat/completions';
+        this.apiEndpoint = null;
+        this.openRouterApiKey = null;
+        this.openRouterEndpoint = null;
+        this.openRouterModel = 'deepseek/deepseek-r1-0528:free';
+        this.groqApiKey = null;
+        this.groqEndpoint = null;
+        this.groqModel = 'llama-3.3-70b-versatile'; // Set your Groq model here
         this.gameState = {
             storyHistory: [],
             relationshipLevel: 0, // 0-100 scale, starting at 0 (strained)
@@ -15,28 +21,21 @@ class RickortyGame {
             narrative: 12
         };
         
-        this.openRouterApiKey = 'YOUR_OPENROUTER_API_KEY';
-        this.openRouterEndpoint = 'https://openrouter.ai/api/v1/chat/completions';
-        this.openRouterModel = 'deepseek/deepseek-r1-0528:free';
-
-        this.groqApiKey = 'YOUR_GROQ_API_KEY';
-        this.groqEndpoint = 'https://api.groq.com/openai/v1/chat/completions';
-        this.groqModel = 'llama-3.3-70b-versatile'; // Set your Groq model here
-        
         this.initializeGame();
         this.bindEvents();
     }
 
     // Load configuration from server
     async loadConfig() {
-        // Use configuration from loaded config file
         if (window.gameConfig) {
-            this.apiKey = window.gameConfig.apiKey;
-            this.apiEndpoint = window.gameConfig.apiEndpoint;
+            this.apiKey = window.gameConfig.chutesApiKey;
+            this.apiEndpoint = window.gameConfig.chutesApiEndpoint;
+            this.openRouterApiKey = window.gameConfig.openRouterApiKey;
+            this.openRouterEndpoint = window.gameConfig.openRouterApiEndpoint;
+            this.groqApiKey = window.gameConfig.groqApiKey;
+            this.groqEndpoint = window.gameConfig.groqApiEndpoint;
             return true;
         }
-        
-        // Fallback if config not loaded
         this.showError('Game configuration not loaded. Please refresh the page.');
         return false;
     }
