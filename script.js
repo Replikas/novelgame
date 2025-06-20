@@ -480,6 +480,9 @@ Respond with a JSON structure containing:
 }
 
 - Always maintain continuity with previous events and character knowledge. Do not contradict earlier story developments.
+
+- Avoid repeating the same scene descriptions (e.g., do not say 'the garage is dimly lit' every time). Be creative and vary the setting details and atmosphere in each scene.
+- When presenting choices, have the character voice or express each choice in their own words, as dialogue or internal thought, not just as a narrator or generic text.
 `;
     }
 
