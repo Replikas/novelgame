@@ -170,7 +170,7 @@ class RickortyGame {
     async startNewGame() {
         this.gameState = {
             storyHistory: [],
-            relationshipLevel: 0, // Starting at 0 (strained)
+            relationshipLevel: 50, // Start at neutral
             currentScene: null,
             isGameOver: false,
             turnCount: 0
@@ -485,6 +485,8 @@ Respond with a JSON structure containing:
 
 - Avoid repeating the same scene descriptions (e.g., do not say 'the garage is dimly lit' every time). Be creative and vary the setting details and atmosphere in each scene.
 - When presenting choices, have the character voice or express each choice in their own words, as dialogue or internal thought, not just as a narrator or generic text.
+
+Rick and Morty can show a range of emotions and can be persuaded to be softer or more vulnerable with each other, depending on the situation and choices. Their relationship is not always tense or combative at the start.
 `;
     }
 
