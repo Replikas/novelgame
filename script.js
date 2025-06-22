@@ -228,8 +228,7 @@ class RickortyGame {
                     { role: 'user', content: prompt }
                 ],
                 max_tokens: 1600,
-                temperature: 0.7,
-                reasoning: false
+                temperature: 0.7
             };
             const chutesResponse = await fetch(this.apiEndpoint, {
                 method: 'POST',
