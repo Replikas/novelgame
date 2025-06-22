@@ -223,7 +223,7 @@ class RickortyGame {
         // 1. Try Chutes
         try {
             const chutesBody = {
-                model: 'deepseek-ai/deepseek-coder-33b-instruct',
+                model: 'deepseek-ai/DeepSeek-V3-0324',
                 messages: [
                     { role: 'user', content: prompt }
                 ],
