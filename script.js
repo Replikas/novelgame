@@ -590,12 +590,10 @@ async function talkToCharSnap(messageText) {
   if (!charSnapThreadId) {
     resetCharSnapChat();
   }
-  const response = await fetch("https://api.charsnap.ai/api/v1/chat/add", {
+  const response = await fetch("/api/charsnap", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
-      // Provide the Authorization token securely, e.g., via backend proxy or environment variable
-      // "Authorization": "Bearer YOUR_TOKEN_HERE"
+      "Content-Type": "application/json"
     },
     body: JSON.stringify({
       threadId: charSnapThreadId,
