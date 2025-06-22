@@ -315,6 +315,10 @@ class RickortyGame {
             // Clean up response
             let cleanResponse = response.trim();
             cleanResponse = cleanResponse.replace(/<think>[\s\S]*?<\/think>/g, '');
+            // Remove <reasoning>...</reasoning> blocks
+            cleanResponse = cleanResponse.replace(/<reasoning>[\s\S]*?<\/reasoning>/gi, '');
+            // Remove lines starting with 'Reasoning:' or 'Explanation:' (case-insensitive)
+            cleanResponse = cleanResponse.replace(/^\s*(Reasoning:|Explanation:).*$/gim, '');
             // Handle JSON parsing
             if (cleanResponse.includes('```json')) {
                 const jsonMatch = cleanResponse.match(/```json\s*([\s\S]*?)\s*```/);
