@@ -739,3 +739,43 @@ document.addEventListener('keydown', (e) => {
         window.rickortyGame.showHistory();
     }
 });
+
+// CharSnap Eclipse API integration with session/thread management
+let charSnapThreadId = null;
+let charSnapParentId = null;
+
+function resetCharSnapChat() {
+  charSnapThreadId = crypto.randomUUID();
+  charSnapParentId = null;
+}
+
+async function talkToCharSnap(messageText) {
+  if (!charSnapThreadId) {
+    resetCharSnapChat();
+  }
+  const response = await fetch("https://api.charsnap.ai/api/v1/chat/add", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      // Provide the Authorization token securely, e.g., via backend proxy or environment variable
+      // "Authorization": "Bearer YOUR_TOKEN_HERE"
+    },
+    body: JSON.stringify({
+      threadId: charSnapThreadId,
+      message: messageText,
+      characterInfo: {
+        characterId: "00000000-0000-0000-0000-000000000000",
+        NSFW: true,
+        name: "CustomRick"
+      },
+      modelInfo: {
+        id: "fe3fd082-060e-48bf-ac08-8455b40c9a93"
+      },
+      parentId: charSnapParentId
+    })
+  });
+
+  const data = await response.json();
+  charSnapParentId = data?.message?.id || charSnapParentId; // update for next call
+  return data?.message?.content || "[No reply]";
+}
