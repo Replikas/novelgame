@@ -212,193 +212,30 @@ class RickortyGame {
         return systemPrompt;
     }
 
-    // Call the LLM API
+    // Use CharSnap for all dialogue/story generation
     async callLLM(prompt) {
-        console.log('Prompt sent to LLM:', prompt);
-        if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
-            throw new Error("Morty, the story prompt is empty! Something went wrong. Try restarting the game or contact support.");
+        // Ensure CharSnap session is started
+        if (!charSnapThreadId) {
+            resetCharSnapChat();
         }
-        // 1. Try Chutes
-        try {
-            const chutesBody = {
-                model: 'deepseek-ai/DeepSeek-V3-0324',
-                messages: [
-                    { role: 'user', content: prompt }
-                ],
-                max_tokens: 1600,
-                temperature: 0.7,
-                reasoning: false
-            };
-            const chutesResponse = await fetch(this.apiEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${this.apiKey}`
-                },
-                body: JSON.stringify(chutesBody)
-            });
-            if (chutesResponse.ok) {
-                const data = await chutesResponse.json();
-                return data.choices[0].message.content;
-            } else {
-                const errorText = await chutesResponse.text();
-                console.error('Chutes API error:', chutesResponse.status, errorText);
-            }
-        } catch (e) {
-            console.error('Chutes API fetch error:', e);
-        }
-        // 2. Try OpenRouter
-        try {
-            const openRouterBody = {
-                model: this.openRouterModel,
-                messages: [
-                    { role: 'user', content: prompt }
-                ],
-                max_tokens: 800,
-                temperature: 0.9
-            };
-            const openRouterResponse = await fetch(this.openRouterEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${this.openRouterApiKey}`
-                },
-                body: JSON.stringify(openRouterBody)
-            });
-            if (openRouterResponse.ok) {
-                const data = await openRouterResponse.json();
-                return data.choices[0].message.content;
-            } else {
-                const errorText = await openRouterResponse.text();
-                console.error('OpenRouter API error:', openRouterResponse.status, errorText);
-            }
-        } catch (e) {
-            console.error('OpenRouter API fetch error:', e);
-        }
-        // 3. Try Groq
-        try {
-            const groqBody = {
-                model: this.groqModel,
-                messages: [
-                    { role: 'user', content: prompt }
-                ],
-                max_tokens: 1600,
-                temperature: 0.7
-            };
-            const groqResponse = await fetch(this.groqEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${this.groqApiKey}`
-                },
-                body: JSON.stringify(groqBody)
-            });
-            if (groqResponse.ok) {
-                const data = await groqResponse.json();
-                return data.choices[0].message.content;
-            } else {
-                const errorText = await groqResponse.text();
-                console.error('Groq API error:', groqResponse.status, errorText);
-            }
-        } catch (e) {
-            console.error('Groq API fetch error:', e);
-        }
-        // If all fail, show error
-        throw new Error("Wubba lubba dub dub! The story generator is unavailable right now. Try again in a few minutes, Morty!");
+        // Send prompt to CharSnap and return the reply
+        return await talkToCharSnap(prompt);
     }
 
-    // Process LLM response
+    // Process LLM response (adapted for CharSnap)
     async processLLMResponse(response) {
-        try {
-            let parsedResponse;
-            
-            // Clean up response
-            let cleanResponse = response.trim();
-            cleanResponse = cleanResponse.replace(/<think>[\s\S]*?<\/think>/g, '');
-            
-            // Handle JSON parsing
-            if (cleanResponse.includes('```json')) {
-                const jsonMatch = cleanResponse.match(/```json\s*([\s\S]*?)\s*```/);
-                if (jsonMatch) {
-                    cleanResponse = jsonMatch[1].trim();
-                }
-            }
-            
-            try {
-                parsedResponse = JSON.parse(cleanResponse);
-            } catch (e) {
-                console.log('JSON parsing failed, attempting to fix:', e.message);
-                parsedResponse = this.parseNonJSONResponse(response);
-            }
-
-            if (!parsedResponse.scene || !parsedResponse.choices) {
-                throw new Error('Invalid response format from LLM');
-            }
-
-            this.gameState.currentScene = parsedResponse;
-            this.gameState.turnCount++;
-            
-            // Remove generating indicator
-            const generatingIndicator = document.getElementById('generatingIndicator');
-            if (generatingIndicator) {
-                generatingIndicator.remove();
-            }
-            
-            // Display content with typewriter effect
-            if (parsedResponse.narrative) {
-                await this.displayNarrative(parsedResponse.narrative);
-            }
-            
-            await this.displayScene(parsedResponse.scene);
-            this.displayChoices(parsedResponse.choices);
-            
-            // Auto-scroll to bottom
-            const dialogueContainer = document.getElementById('dialogueContainer');
-            dialogueContainer.scrollTop = dialogueContainer.scrollHeight;
-            
-        } catch (error) {
-            console.error('Failed to process LLM response:', error);
-            console.error('Raw response:', response);
-            // Remove generating indicator
-            const generatingIndicator = document.getElementById('generatingIndicator');
-            if (generatingIndicator) {
-                generatingIndicator.remove();
-            }
-            // Show user-friendly error with raw LLM output
-            this.showError(
-                'The AI returned an invalid response. Please try again or pick a different option.\n\nRaw LLM output:\n' +
-                '<pre style="white-space:pre-wrap;max-height:300px;overflow:auto;background:#222;color:#fff;padding:10px;border-radius:6px;">' +
-                (typeof response === 'string' ? response.replace(/</g, '&lt;').replace(/>/g, '&gt;') : JSON.stringify(response, null, 2)) +
-                '</pre>'
-            );
-        }
-    }
-
-    // Parse non-JSON response (fallback)
-    parseNonJSONResponse(response) {
-        // Simple parser for cases where LLM doesn't return proper JSON
-        console.warn('Parsing non-JSON response:', response);
-        
-        // Create a basic alternating dialogue structure
-        const scene = [
-            { character: "Rick", dialogue: "Look, Morty, the story generator's being weird again." },
-            { narrative: "Rick waves his hand dismissively while Morty looks confused." },
-            { character: "Morty", dialogue: "Aw geez, Rick, can't you just fix it?" },
-            { narrative: "The tension in the garage grows as technical difficulties interrupt their moment." },
-            { character: "Rick", dialogue: "I'm working on it, okay? These things happen." }
-        ];
-        
-        const choices = [
-            "Try to help Rick fix the problem",
-            "Wait patiently for Rick to handle it", 
-            "Suggest taking a break from the adventure"
-        ];
-        
-        return { 
-            narrative: "The story engine encounters some technical difficulties, but Rick and Morty continue their conversation.",
-            scene, 
-            choices 
-        };
+        // CharSnap returns plain text, not JSON
+        // Display the reply as a single narrative/dialogue block
+        const dialogueContent = document.getElementById('dialogueContent');
+        const replyElement = document.createElement('div');
+        replyElement.className = 'narrative-text';
+        dialogueContent.appendChild(replyElement);
+        await this.typewriterEffectHTML(replyElement, `<em>${response}</em>`, this.typingSpeed.narrative);
+        // No choices or scene structure for now
+        document.getElementById('choicesContainer').innerHTML = '';
+        // Auto-scroll
+        const dialogueContainer = document.getElementById('dialogueContainer');
+        dialogueContainer.scrollTop = dialogueContainer.scrollHeight;
     }
 
     // Display narrative text with typewriter effect
