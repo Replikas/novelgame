@@ -4,3 +4,4 @@
 # Required Python packages
 urllib3>=1.26.0
 requests>=2.25.0
+Flask
