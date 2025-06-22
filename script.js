@@ -223,7 +223,7 @@ class RickortyGame {
         // 1. Try Chutes
         try {
             const chutesBody = {
-                model: 'ArliAI/QwQ-32B-ArliAI-RpR-v1',
+                model: 'deepseek-ai/deepseek-coder-33b-instruct',
                 messages: [
                     { role: 'user', content: prompt }
                 ],
