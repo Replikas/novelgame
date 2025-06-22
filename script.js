@@ -212,30 +212,156 @@ class RickortyGame {
         return systemPrompt;
     }
 
-    // Use CharSnap for all dialogue/story generation
+    // Restore original callLLM method for Chutes/OpenRouter/Groq
     async callLLM(prompt) {
-        // Ensure CharSnap session is started
-        if (!charSnapThreadId) {
-            resetCharSnapChat();
+        console.log('Prompt sent to LLM:', prompt);
+        if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
+            throw new Error("Morty, the story prompt is empty! Something went wrong. Try restarting the game or contact support.");
         }
-        // Send prompt to CharSnap and return the reply
-        return await talkToCharSnap(prompt);
+        // 1. Try Chutes
+        try {
+            const chutesBody = {
+                model: 'deepseek-ai/DeepSeek-V3-0324',
+                messages: [
+                    { role: 'user', content: prompt }
+                ],
+                max_tokens: 1600,
+                temperature: 0.7,
+                reasoning: false
+            };
+            const chutesResponse = await fetch(this.apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.apiKey}`
+                },
+                body: JSON.stringify(chutesBody)
+            });
+            if (chutesResponse.ok) {
+                const data = await chutesResponse.json();
+                return data.choices[0].message.content;
+            } else {
+                const errorText = await chutesResponse.text();
+                console.error('Chutes API error:', chutesResponse.status, errorText);
+            }
+        } catch (e) {
+            console.error('Chutes API fetch error:', e);
+        }
+        // 2. Try OpenRouter
+        try {
+            const openRouterBody = {
+                model: this.openRouterModel,
+                messages: [
+                    { role: 'user', content: prompt }
+                ],
+                max_tokens: 800,
+                temperature: 0.9
+            };
+            const openRouterResponse = await fetch(this.openRouterEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.openRouterApiKey}`
+                },
+                body: JSON.stringify(openRouterBody)
+            });
+            if (openRouterResponse.ok) {
+                const data = await openRouterResponse.json();
+                return data.choices[0].message.content;
+            } else {
+                const errorText = await openRouterResponse.text();
+                console.error('OpenRouter API error:', openRouterResponse.status, errorText);
+            }
+        } catch (e) {
+            console.error('OpenRouter API fetch error:', e);
+        }
+        // 3. Try Groq
+        try {
+            const groqBody = {
+                model: this.groqModel,
+                messages: [
+                    { role: 'user', content: prompt }
+                ],
+                max_tokens: 1600,
+                temperature: 0.7
+            };
+            const groqResponse = await fetch(this.groqEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.groqApiKey}`
+                },
+                body: JSON.stringify(groqBody)
+            });
+            if (groqResponse.ok) {
+                const data = await groqResponse.json();
+                return data.choices[0].message.content;
+            } else {
+                const errorText = await groqResponse.text();
+                console.error('Groq API error:', groqResponse.status, errorText);
+            }
+        } catch (e) {
+            console.error('Groq API fetch error:', e);
+        }
+        // If all fail, show error
+        throw new Error("Wubba lubba dub dub! The story generator is unavailable right now. Try again in a few minutes, Morty!");
     }
 
-    // Process LLM response (adapted for CharSnap)
+    // Restore original processLLMResponse method
     async processLLMResponse(response) {
-        // CharSnap returns plain text, not JSON
-        // Display the reply as a single narrative/dialogue block
-        const dialogueContent = document.getElementById('dialogueContent');
-        const replyElement = document.createElement('div');
-        replyElement.className = 'narrative-text';
-        dialogueContent.appendChild(replyElement);
-        await this.typewriterEffectHTML(replyElement, `<em>${response}</em>`, this.typingSpeed.narrative);
-        // No choices or scene structure for now
-        document.getElementById('choicesContainer').innerHTML = '';
-        // Auto-scroll
-        const dialogueContainer = document.getElementById('dialogueContainer');
-        dialogueContainer.scrollTop = dialogueContainer.scrollHeight;
+        try {
+            let parsedResponse;
+            // Clean up response
+            let cleanResponse = response.trim();
+            cleanResponse = cleanResponse.replace(/<think>[\s\S]*?<\/think>/g, '');
+            // Handle JSON parsing
+            if (cleanResponse.includes('```json')) {
+                const jsonMatch = cleanResponse.match(/```json\s*([\s\S]*?)\s*```/);
+                if (jsonMatch) {
+                    cleanResponse = jsonMatch[1].trim();
+                }
+            }
+            try {
+                parsedResponse = JSON.parse(cleanResponse);
+            } catch (e) {
+                console.log('JSON parsing failed, attempting to fix:', e.message);
+                parsedResponse = this.parseNonJSONResponse(response);
+            }
+            if (!parsedResponse.scene || !parsedResponse.choices) {
+                throw new Error('Invalid response format from LLM');
+            }
+            this.gameState.currentScene = parsedResponse;
+            this.gameState.turnCount++;
+            // Remove generating indicator
+            const generatingIndicator = document.getElementById('generatingIndicator');
+            if (generatingIndicator) {
+                generatingIndicator.remove();
+            }
+            // Display content with typewriter effect
+            if (parsedResponse.narrative) {
+                await this.displayNarrative(parsedResponse.narrative);
+            }
+            await this.displayScene(parsedResponse.scene);
+            this.displayChoices(parsedResponse.choices);
+            // Auto-scroll to bottom
+            const dialogueContainer = document.getElementById('dialogueContainer');
+            dialogueContainer.scrollTop = dialogueContainer.scrollHeight;
+        } catch (error) {
+            console.error('Failed to process LLM response:', error);
+            console.error('Raw response:', response);
+            // Remove generating indicator
+            const generatingIndicator = document.getElementById('generatingIndicator');
+            if (generatingIndicator) {
+                generatingIndicator.remove();
+            }
+            // Show user-friendly error with raw LLM output
+            this.showError(
+                'The AI returned an invalid response. Please try again or pick a different option.\n\nRaw LLM output:\n' +
+                '<pre style="white-space:pre-wrap;max-height:300px;overflow:auto;background:#222;color:#fff;padding:10px;border-radius:6px;">' +
+                (typeof response === 'string' ? response.replace(/</g, '&lt;').replace(/>/g, '&gt;') : JSON.stringify(response, null, 2)) +
+                '</pre>'
+            );
+        }
     }
 
     // Display narrative text with typewriter effect
