@@ -81,6 +81,38 @@ class RickortyGame {
                 this.hideHistory();
             }
         });
+        // Custom input toggle and submit
+        const toggleBtn = document.getElementById('toggleCustomInputBtn');
+        const customInputArea = document.getElementById('customInputArea');
+        const customInput = document.getElementById('customChoiceInput');
+        const submitBtn = document.getElementById('submitCustomChoiceBtn');
+        if (toggleBtn && customInputArea) {
+            toggleBtn.addEventListener('click', () => {
+                if (customInputArea.style.display === 'none') {
+                    customInputArea.style.display = 'block';
+                    customInput.focus();
+                } else {
+                    customInputArea.style.display = 'none';
+                }
+            });
+        }
+        if (submitBtn && customInput) {
+            const submitCustom = () => {
+                const value = customInput.value.trim();
+                if (value.length > 0) {
+                    this.selectChoice(value, -1);
+                    customInput.value = '';
+                    customInput.disabled = true;
+                    submitBtn.disabled = true;
+                }
+            };
+            submitBtn.addEventListener('click', submitCustom);
+            customInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    submitCustom();
+                }
+            });
+        }
     }
 
     // Typewriter effect for text
@@ -569,6 +601,13 @@ Respond with a JSON structure containing:
             button.onclick = () => this.selectChoice(choice, index);
             choicesContainer.appendChild(button);
         });
+        // Re-enable custom input if present
+        const customInput = document.getElementById('customChoiceInput');
+        const submitBtn = document.getElementById('submitCustomChoiceBtn');
+        if (customInput && submitBtn) {
+            customInput.disabled = false;
+            submitBtn.disabled = false;
+        }
     }
 
     // Handle choice selection
