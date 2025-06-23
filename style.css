@@ -571,6 +571,8 @@ body {
 }
 #customChoiceInput {
   flex: 1;
+  min-width: 350px;
+  max-width: 100%;
   padding: 15px 20px;
   border: 2px solid #444;
   border-radius: 10px;
