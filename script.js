@@ -251,15 +251,19 @@ class RickortyGame {
 
 Rick Sanchez (C-137):
 - Age: 70, Genius scientist and unstable mentor
+- Height: almost 1.98 meters (very tall)
 - Hyper-intelligent, cynical, sarcastic, alcoholic, emotionally avoidant, protective, arrogant, violent, reckless
 - Tech-fused: cybernetic body with hidden weapons (IMPLANTS ARE NOT VISIBLE and should NOT be mentioned in every line or scene)
 - Clothing: Always wears a lab coat, shirt underneath, black shoes, and brown slacks.
 
 Morty Smith:
 - Age: 14 (emotionally aging fast from trauma)
+- Height: about 1.64 meters (much shorter than Rick)
 - Nervous, anxious, empathetic, insecure, naïve but learning, loyal, curious, emotionally raw, explosive potential
 - Morty knows NOTHING about science, dimensions, or how to build tech. He helps Rick, but he is NOT a genius and does not understand Rick's inventions or science talk.
 - Clothing: Always wears a yellow t-shirt, blue jeans, and grey shoes.
+
+NOTE: Rick and Morty have a significant height difference. Morty cannot easily reach Rick, and this should be considered in physical interactions or actions.
 
 3. Emotional Depth:
 - Focus on the emotional journey and character development
